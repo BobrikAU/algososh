@@ -7,7 +7,7 @@ import { ElementStates } from "../../types/element-states";
 import { nanoid } from "nanoid";
 import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { Stack } from "../../classes/stack";
+import { Stack } from "./stack";
 
 interface IStringElement{
   string: string;
@@ -23,21 +23,26 @@ interface IState{
 
 export const StackPage: React.FC = () => {
 
+  // переключатель для принудительного рендеринга
   const [ newRender, setNewRender ] = useState<boolean>(false);
+  // показатель наличия текста в поле input
   const [ isTextInInput, setIsTextInInput ] = useState<boolean>(false);
+  // состояние работы алгоритма
   const [ state, setState ] = useState<IState>({
     isAlgoritmWork: false,
     isAdding: false,
     isRemoval: false,
   });
 
+  // поле input
   const inputRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
-  const stack: React.MutableRefObject<Stack<IStringElement>> = 
-    useRef(new Stack<IStringElement>());
   useEffect(() => {
     inputRef.current = document.querySelector('.input-in-container > .text_type_input');
   }, []);
+  // экземпляр класса Stack
+  const stack = useRef(new Stack<IStringElement>());
   
+  // определение наличия текста в поле input
   const checkTextInInput = () => {
     if (inputRef.current?.value !== '') {
       setIsTextInInput(true);
@@ -46,6 +51,7 @@ export const StackPage: React.FC = () => {
     }
   }
 
+  // добавление элемента в Stack
   const addElementInStack = () => {
     setState({
       isAlgoritmWork: true,
@@ -65,7 +71,6 @@ export const StackPage: React.FC = () => {
     setTimeout(() => {
       stack.current.getStack()[stack.current.getStackLength() - 1].state = 
         ElementStates.Default;
-      setNewRender(!newRender);
       setState({
         isAlgoritmWork: false,
         isAdding: false,
@@ -74,6 +79,7 @@ export const StackPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   };
 
+  // удаление элемента Stack
   const deleteElementInStack = () => {
     setState({
       isAlgoritmWork: true,
@@ -85,7 +91,6 @@ export const StackPage: React.FC = () => {
     setNewRender(!newRender);
     setTimeout(() => {
       stack.current.getStack().pop();
-      setNewRender(!newRender);
       setState({
         isAlgoritmWork: false,
         isAdding: false,
@@ -94,11 +99,13 @@ export const StackPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   };
 
+  // удаление всех элементов Stack
   const reset = () => {
     stack.current.clear();
     setNewRender(!newRender);
   };
 
+  // формирование JSX-элементов для отображения содержания Stack
   const circleElements = stack.current.getStack().map((item, index) => {
     if (20 - stack.current.getStackLength() + index >= 0) {
       return <Circle
