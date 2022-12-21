@@ -45,7 +45,7 @@ export const QueuePage: React.FC = () => {
   }, []);
   // создание экземпляра класса очереди и его первоначальное заполнение
   const queue = useRef(new Queue<IElement>());
-  if(queue.current.getQueue().length === 0) {
+  if (queue.current.getQueue().length === 0) {
     for (let i = 0; i <= 6; i++) {
       queue.current.pushInitialElement({
         letter: '',
