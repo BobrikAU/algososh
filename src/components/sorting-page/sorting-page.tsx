@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -7,7 +7,7 @@ import styles from "./sorting-page.module.css";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { nanoid } from "nanoid";
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 interface INumberArray {
   number: number;

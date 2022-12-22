@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Queue } from "./queue";
+import { HEAD, TAIL } from "../../constants/element-captions";
 
 // интерфейс элемента очереди
 interface IElement {
@@ -45,7 +46,7 @@ export const QueuePage: React.FC = () => {
   }, []);
   // создание экземпляра класса очереди и его первоначальное заполнение
   const queue = useRef(new Queue<IElement>());
-  if(queue.current.getQueue().length === 0) {
+  if (queue.current.getQueue().length === 0) {
     for (let i = 0; i <= 6; i++) {
       queue.current.pushInitialElement({
         letter: '',
@@ -95,8 +96,8 @@ export const QueuePage: React.FC = () => {
       setTimeout(() => {
         if (inputRef.current !== null) {
           arrayHead.letter = inputRef.current.value;
-          arrayHead.head = 'head';
-          arrayHead.tail = 'tail';
+          arrayHead.head = HEAD;
+          arrayHead.tail = TAIL;
           inputRef.current.value = '';
           setIsInputEmpty(true);
         }
@@ -121,7 +122,7 @@ export const QueuePage: React.FC = () => {
         if (inputRef.current !== null) {
           arrayOldTail.tail = null;
           arrayNewTail.letter = inputRef.current.value;
-          arrayNewTail.tail = 'tail';
+          arrayNewTail.tail = TAIL;
           queue.current.changeTailIndex(newTailIndex);
           inputRef.current.value = '';
           setIsInputEmpty(true);
@@ -157,7 +158,7 @@ export const QueuePage: React.FC = () => {
         arrayOldHead.tail = null;
       } else {
         arrayOldHead.head = null;
-        arrayNewHead.head = 'head';
+        arrayNewHead.head = HEAD;
         queue.current.changeHeadIndex(newHeadIndex);
       }
       arrayOldHead.state =  ElementStates.Default;
