@@ -19,7 +19,6 @@ export class LinkedList<T> {
 
   prepend(newElement: T) {
     const newHead = new LinkedListNode<T>(newElement, this.head);
-    this.head.value.head = null;
     this.head = newHead;
   }
 
@@ -47,7 +46,6 @@ export class LinkedList<T> {
   append(newElement: T) {
     const newTail = new LinkedListNode<T>(newElement);
     if (this.tail) {
-      this.tail.value.tail = null;
       this.tail.next = newTail;
       this.tail = newTail;
     }
@@ -57,12 +55,10 @@ export class LinkedList<T> {
     if (this.head.next !== null) {
       this.head = this.head.next;
     }
-    this.head.value.head = 'head';
   }
 
   deleteTail() {
     const penultimateElement = this._getPenultimateElement();
-    penultimateElement.value.tail = 'tail';
     penultimateElement.next = null;
     this.tail = penultimateElement;
   }
@@ -92,7 +88,7 @@ export class LinkedList<T> {
       prevListNode.next = prevListNode.next.next;
     } else if (prevListNode.next && prevListNode.next.next === null) {
       prevListNode.next = null;
-      prevListNode.value.tail = 'tail';
+      this.tail = prevListNode;
     } if (index === 0) {
       this.deleteHead()
     }

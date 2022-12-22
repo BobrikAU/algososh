@@ -10,6 +10,7 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { LinkedList } from "./linkedList";
 import { LinkedListNode } from "./linkedListNode";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+import { HEAD, TAIL } from "../../constants/element-captions";
 
 interface ILinkedListNode{
   string: string;
@@ -21,9 +22,13 @@ interface ILinkedListNode{
 
 export const ListPage: React.FC = () => {
 
+  // состояние для принудительного рендеринга
   const [ , setNewRender ] = useState<string>(nanoid());
+  // состояние поля input со значением нового элемента списка
   const [ isStringInputEmpty, setIsStringInputEmpty ] = useState(true);
+  // состояние поля input со значением индекса элемента
   const [ isIndexInputEmpty, setIsIndexInputEmpty ] = useState(true);
+  // состояние функционирования алгоритма работы списка и его методов
   const [ state, setState ] = useState({
     isAlgoritmWork: false,
     isAddHead: false,
@@ -34,6 +39,7 @@ export const ListPage: React.FC = () => {
     isDeleteByIndex: false,
   });
 
+  // список для инициализации первоначального списка с случайными значениями
   const numberArray = useRef<number[]>([]);
   if (numberArray.current.length === 0) {
     for (let i = 1; i <= 4 + Math.round(Math.random() * 2); i++) {
@@ -47,17 +53,21 @@ export const ListPage: React.FC = () => {
       string: number.toString(),
       state: ElementStates.Default,
       uuid: nanoid(),
-      head: i === 0 ? 'head' : null,
-      tail: i === numberArray.current.length - 1 ? 'tail' : null,
+      head: i === 0 ? HEAD : null,
+      tail: i === numberArray.current.length - 1 ? TAIL : null,
     })
   }
+
+  // создание экземпляра связанного списка
   const linkedList = useRef(new LinkedList<ILinkedListNode>(initializingList));
 
+  // создание переменной input, где вводятся значения новых элементов связанного списка
   const stringInputRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     stringInputRef.current = 
       document.querySelector('.input-string-container > .text_type_input');
   }, []);
+  // проверка поля input на наличие в нем новых значений
   const checkStringInput = () => {
     if (stringInputRef.current && stringInputRef.current.value !== '') {
       setIsStringInputEmpty(false);
@@ -68,14 +78,13 @@ export const ListPage: React.FC = () => {
     }
   };
 
-
-
-
+  // создание переменной input, где определяется индекс элемента
   const indexInputRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     indexInputRef.current = 
       document.querySelector('.input-index-container > .text_type_input');
   }, []);
+  // проверка поля input на наличие в нем индекса
   const checkIndexInput = () => {
     if (indexInputRef.current && indexInputRef.current.value !== '') {
       setIsIndexInputEmpty(false);
@@ -86,24 +95,18 @@ export const ListPage: React.FC = () => {
     }
   };
 
-
-
-
-
-
-
-
-
+  // создание описания добавляемого элемента списка
   function creatNewElement(partList: string): ILinkedListNode {
     return {
       string: stringInputRef.current ? stringInputRef.current.value : '',
       state: ElementStates.Modified,
       uuid: nanoid(),
-      head: partList === 'head' ? 'head' : null,
-      tail: partList === 'tail' ? 'tail' : null,
+      head: partList === HEAD ? HEAD : null,
+      tail: partList === TAIL ? TAIL : null,
     }
   }
 
+  // создание маленького круга для анимации
   function creatSmallCircle(Element: ILinkedListNode) {
     return <Circle
       state={ElementStates.Changing}
@@ -112,8 +115,9 @@ export const ListPage: React.FC = () => {
     />
   }
 
+  // добавление нового head
   const addNewHead = () => {
-    const newElement = creatNewElement('head');
+    const newElement = creatNewElement(HEAD);
     const smallCircle = creatSmallCircle(newElement);
     linkedList.current.head.value.head = smallCircle;
     setState({
@@ -121,7 +125,6 @@ export const ListPage: React.FC = () => {
       isAlgoritmWork: true,
       isAddHead: true,
     });
-    //setNewRender(nanoid());
     setTimeout(() => {
       linkedList.current.head.value.head = null;
       linkedList.current.prepend(newElement);
@@ -141,8 +144,9 @@ export const ListPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   };
 
+  // добавление нового tail
   const addNewTail = () => {
-    const newElement = creatNewElement('tail');
+    const newElement = creatNewElement(TAIL);
     const smallCircle = creatSmallCircle(newElement);
     const currTail = linkedList.current.tail;
     if (currTail) {currTail.value.head = smallCircle};
@@ -151,9 +155,11 @@ export const ListPage: React.FC = () => {
       isAlgoritmWork: true,
       isAddTail: true,
     });
-    //setNewRender(nanoid());
     setTimeout(() => {
-      if (currTail) {currTail.value.head = null};
+      if (currTail && linkedList.current.tail) {
+        currTail.value.head = null;
+        linkedList.current.tail.value.tail = null;
+      }
       linkedList.current.append(newElement);
       setNewRender(nanoid());
       setTimeout(() => {
@@ -171,11 +177,11 @@ export const ListPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS);
   };
 
+  // удаление head
   const deleteHead = () => {
     const smallCircle = creatSmallCircle(linkedList.current.head.value);
     linkedList.current.head.value.tail = smallCircle;
     linkedList.current.head.value.string = '';
-    //setNewRender(nanoid());
     setState({
       ...state,
       isAlgoritmWork: true,
@@ -183,15 +189,16 @@ export const ListPage: React.FC = () => {
     });
     setTimeout(() => {
       linkedList.current.deleteHead();
+      linkedList.current.head.value.head = HEAD;
       setState({
         ...state,
         isAlgoritmWork: false,
         isDeleteHead: false,
       });
-      //setNewRender(nanoid());
     }, SHORT_DELAY_IN_MS)
   };
 
+  // удаление tail
   const deleteTail = () => {
     const currTail = linkedList.current.tail;
     if (currTail) {
@@ -204,18 +211,20 @@ export const ListPage: React.FC = () => {
       isAlgoritmWork: true,
       isDeleteTail: true,
     });
-    //setNewRender(nanoid());
     setTimeout(() => {
       linkedList.current.deleteTail();
+      if (linkedList.current.tail) {
+        linkedList.current.tail.value.tail = TAIL;
+      }
       setState({
         ...state,
         isAlgoritmWork: false,
         isDeleteTail: false,
       });
-      //setNewRender(nanoid());
     }, SHORT_DELAY_IN_MS)
   };
 
+  // добавление элемента списка по индексу
   const addByIndex = () => {
     const newElement = creatNewElement('');
     const smallCircle = creatSmallCircle(newElement);
@@ -229,11 +238,10 @@ export const ListPage: React.FC = () => {
       isAlgoritmWork: true,
       isAddByIndex: true,
     });
-    //setNewRender(nanoid());
     setTimeout(function move() {
       if (currElement && currElement.next && inputIndex !== 0) {
         if (currElement === linkedList.current.head) {
-          currElement.value.head = 'head';
+          currElement.value.head = HEAD;
         } else {
           currElement.value.head = '';
         }
@@ -252,6 +260,9 @@ export const ListPage: React.FC = () => {
           elementsArray.push(newListElement);
           if (currElement !== null) {
             currElement.value.head = '';
+          }
+          if (inputIndex === 0) {
+            newListElement.value.head = HEAD;
           }
           setNewRender(nanoid());
           setTimeout(() => {
@@ -275,6 +286,7 @@ export const ListPage: React.FC = () => {
     }, SHORT_DELAY_IN_MS)
   };
 
+  // удаление элемента списка по индексу
   const deleteByIndex = () => {
     if (indexInputRef.current) {
       setState({
@@ -306,6 +318,12 @@ export const ListPage: React.FC = () => {
             setNewRender(nanoid());
             setTimeout(() => {
               linkedList.current.deleteByIndex(inputIndex);
+              if (linkedList.current.tail) {
+                linkedList.current.tail.value.tail = TAIL;
+              }
+              if (inputIndex === 0) {
+                linkedList.current.head.value.head = HEAD;
+              }
               setNewRender(nanoid());
               setTimeout(() => {
                 elementsArray.forEach(item => {
@@ -328,6 +346,7 @@ export const ListPage: React.FC = () => {
     }
   };
 
+  // создание списка JSX-элементов, визуализирующих связной список
   const creatCircleElements = (linkedListHead: LinkedListNode<ILinkedListNode>): 
     JSX.Element[] => {
     const array: JSX.Element[] = [];
@@ -399,6 +418,7 @@ export const ListPage: React.FC = () => {
         />
         <Input
           placeholder = "Введите индекс"
+          type="number"
           maxLength={4}
           extraClass={`${styles.input} input-index-container`}
           onChange={checkIndexInput}
