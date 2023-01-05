@@ -28,6 +28,8 @@ export const ListPage: React.FC = () => {
   const [ isStringInputEmpty, setIsStringInputEmpty ] = useState(true);
   // состояние поля input со значением индекса элемента
   const [ isIndexInputEmpty, setIsIndexInputEmpty ] = useState(true);
+  // значение поля input с индексом не превышает / превышает индекс последнего элемента списка
+  const [ isIndexFit, setIsIndexFit ] = useState(true);
   // состояние функционирования алгоритма работы списка и его методов
   const [ state, setState ] = useState({
     isAlgoritmWork: false,
@@ -40,22 +42,22 @@ export const ListPage: React.FC = () => {
   });
 
   // список для инициализации первоначального списка с случайными значениями
+  let initializingList: ILinkedListNode[] = [];
   const numberArray = useRef<number[]>([]);
   if (numberArray.current.length === 0) {
     for (let i = 1; i <= 4 + Math.round(Math.random() * 2); i++) {
       numberArray.current.push(Math.round(Math.random() * 100));
     }
-  }
-  let initializingList: ILinkedListNode[] = [];
-  for (let i = 0; i <= numberArray.current.length - 1; i++) {
-    const number: number = numberArray.current[i];
-    initializingList.push({
-      string: number.toString(),
-      state: ElementStates.Default,
-      uuid: nanoid(),
-      head: i === 0 ? HEAD : null,
-      tail: i === numberArray.current.length - 1 ? TAIL : null,
-    })
+    for (let i = 0; i <= numberArray.current.length - 1; i++) {
+      const number: number = numberArray.current[i];
+      initializingList.push({
+        string: number.toString(),
+        state: ElementStates.Default,
+        uuid: nanoid(),
+        head: i === 0 ? HEAD : null,
+        tail: i === numberArray.current.length - 1 ? TAIL : null,
+      })
+    }
   }
 
   // создание экземпляра связанного списка
@@ -89,6 +91,25 @@ export const ListPage: React.FC = () => {
     if (indexInputRef.current && indexInputRef.current.value !== '') {
       setIsIndexInputEmpty(false);
     }
+    if (indexInputRef.current && isIndexFit === true &&
+        Number(indexInputRef.current.value) >= linkedList.current.length) {
+      setIsIndexFit(false);
+    }
+    
+    if (indexInputRef.current && isIndexFit === false &&
+        Number(indexInputRef.current.value) < linkedList.current.length) {
+      setIsIndexFit(true);
+    }
+
+
+
+
+
+
+
+
+
+
     if (indexInputRef.current && indexInputRef.current.value === '' && 
       isIndexInputEmpty === false) {
       setIsIndexInputEmpty(true);
@@ -428,14 +449,14 @@ export const ListPage: React.FC = () => {
           text="Добавить по индексу"
           linkedList="big"
           extraClass={styles.button}
-          disabled={isStringInputEmpty || isIndexInputEmpty || state.isAlgoritmWork}
+          disabled={isStringInputEmpty || isIndexInputEmpty || state.isAlgoritmWork || !isIndexFit}
           onClick={addByIndex}
           isLoader={state.isAddByIndex}
         />
         <Button
           text="Удалить по индексу"
           linkedList="big"
-          disabled={isIndexInputEmpty || state.isAlgoritmWork}
+          disabled={isIndexInputEmpty || state.isAlgoritmWork || !isIndexFit}
           onClick={deleteByIndex}
           isLoader={state.isDeleteByIndex}
         />
