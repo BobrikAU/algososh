@@ -3,16 +3,20 @@ import { LinkedListNode } from "./linkedListNode";
 export class LinkedList<T> {
   head: LinkedListNode<T>;
   tail: LinkedListNode<T> | undefined;
+  length: number;
   constructor(initializingArray: T[]) {
-    this.head = this._creatInitializingList(initializingArray)
+    this.length = 0;
+    this.head = this._creatInitializingList(initializingArray);
   }
 
   _creatInitializingList(initializingArray: T[]) {
     let head = new LinkedListNode<T>(initializingArray[initializingArray.length - 1]);
     this.tail = head;
+    this.length += 1;
     for (let i = initializingArray.length - 2; i >= 0; i--) {
       const newLinkedListNode = new LinkedListNode<T>(initializingArray[i], head);
       head = newLinkedListNode;
+      this.length += 1;
     }
     return head;
   }
@@ -20,6 +24,7 @@ export class LinkedList<T> {
   prepend(newElement: T) {
     const newHead = new LinkedListNode<T>(newElement, this.head);
     this.head = newHead;
+    this.length += 1;
   }
 
   getElementByPositionNumber(number: number) {
@@ -48,12 +53,14 @@ export class LinkedList<T> {
     if (this.tail) {
       this.tail.next = newTail;
       this.tail = newTail;
+      this.length += 1;
     }
   }
 
   deleteHead() {
     if (this.head.next !== null) {
       this.head = this.head.next;
+      this.length -= 1;
     }
   }
 
@@ -61,6 +68,7 @@ export class LinkedList<T> {
     const penultimateElement = this._getPenultimateElement();
     penultimateElement.next = null;
     this.tail = penultimateElement;
+    this.length -= 1;
   }
 
   addByIndex(newElement: T, index: number) {
@@ -79,6 +87,7 @@ export class LinkedList<T> {
       prev.next = newListPart;
       newListPart.next = curr;
     }
+    this.length += 1;
     return newListPart;
   }
 
@@ -92,5 +101,6 @@ export class LinkedList<T> {
     } if (index === 0) {
       this.deleteHead()
     }
+    this.length -= 1;
   }
 }
