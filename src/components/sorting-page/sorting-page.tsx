@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -42,6 +42,9 @@ export const SortingPage: React.FC = () => {
     }
     setNumberArray(array);
   };
+  useLayoutEffect(() => {
+    getNewArray();
+  }, []);
 
   // формирование массива для сортировки
   const colunmsArray = numberArray.map(item => 
