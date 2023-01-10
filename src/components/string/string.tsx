@@ -14,11 +14,11 @@ interface IStringElement{
   key: string;
 }
 
-export const StringComponent: React.FC = () => {
+export const ChildrenOfStringComponent: React.FC = () => {
   // состояние для элементов строки
   const [ mark, setMark ] = useState<boolean>(false);
   const [ invertedString, setInvertedString ] = useState<IStringElement[]>([]);
-  const [ isStringInvert, setIsStringInvert] = useState<boolean>(false);
+  const [ isStringInvert, setIsStringInvert ] = useState<boolean>(false);
 
   // поиск поля input в DOM
   const input: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -88,14 +88,15 @@ export const StringComponent: React.FC = () => {
   // формирование из введенной в input строки массива элементов строки
   const useTextInput = () => {
     if (input.current !== null) {
-        const newString = input.current.value.split('').map(item => ({
-          string: item,
-          state: ElementStates.Default,
-          key: nanoid(),
-        }));
-        setInvertedString(newString);
-        setMark(!mark);
-      }  };
+      const newString = input.current.value.split('').map(item => ({
+        string: item,
+        state: ElementStates.Default,
+        key: nanoid(),
+      }));
+      setInvertedString(newString);
+      setMark(!mark);
+    }
+  };
   const stringInCircle = invertedString.length === 0 ? null : invertedString.map(item => {
     return (
       <Circle
@@ -108,7 +109,7 @@ export const StringComponent: React.FC = () => {
   });
 
   return (
-    <SolutionLayout title="Строка">
+    <>
       <div className={styles.elementsContainer}>
         <Input 
           maxLength={11}
@@ -126,6 +127,15 @@ export const StringComponent: React.FC = () => {
       <div className={styles.stringsContainer}>
         {stringInCircle && stringInCircle}
       </div>
+    </>
+  );
+};
+
+export const StringComponent: React.FC = () => {
+
+  return (
+    <SolutionLayout title="Строка">
+      <ChildrenOfStringComponent />
     </SolutionLayout>
   );
 };

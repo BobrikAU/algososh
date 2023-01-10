@@ -12,6 +12,7 @@ exports[`Тестирование компонента Circle. Circle без т�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -35,6 +36,7 @@ exports[`Тестирование компонента Circle. Circle в сос�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -58,6 +60,7 @@ exports[`Тестирование компонента Circle. Circle в сос�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -81,6 +84,7 @@ exports[`Тестирование компонента Circle. Circle в сос�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -106,6 +110,7 @@ exports[`Тестирование компонента Circle. Circle с head 1`
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -129,6 +134,7 @@ exports[`Тестирование компонента Circle. Circle с index 1
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -160,6 +166,7 @@ exports[`Тестирование компонента Circle. Circle с react-�
       >
         <p
           className="text text_type_circle text_color_input letter"
+          data-testid="text-in-circle"
         >
           Text
         </p>
@@ -177,6 +184,7 @@ exports[`Тестирование компонента Circle. Circle с react-�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -200,6 +208,7 @@ exports[`Тестирование компонента Circle. Circle с react-�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -219,6 +228,7 @@ exports[`Тестирование компонента Circle. Circle с react-�
       >
         <p
           className="text text_type_circle text_color_input letter"
+          data-testid="text-in-circle"
         >
           Text
         </p>
@@ -246,6 +256,7 @@ exports[`Тестирование компонента Circle. Circle с tail 1`
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -271,6 +282,7 @@ exports[`Тестирование компонента Circle. Circle с про�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     />
   </div>
   <p
@@ -294,6 +306,7 @@ exports[`Тестирование компонента Circle. Circle с тек�
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="text-in-circle"
     >
       Text
     </p>
