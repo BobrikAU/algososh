@@ -19,12 +19,24 @@ export const ChildrenOfStringComponent: React.FC = () => {
   const [ mark, setMark ] = useState<boolean>(false);
   const [ invertedString, setInvertedString ] = useState<IStringElement[]>([]);
   const [ isStringInvert, setIsStringInvert ] = useState<boolean>(false);
+  const [ isInputEmpty, setIsInputEmpty ] = useState<boolean>(true);
 
   // поиск поля input в DOM
   const input: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
   useEffect(() => {
     input.current = document.querySelector('.input-in-container > .text_type_input');
   }, []);
+
+  // отключение кнопки разворота строки, если в поле вводе нет значения, и наоборот
+  const controlInputValue = () => {
+    if (input.current) {
+      if (input.current.value.length === 0 && isInputEmpty === false) {
+        setIsInputEmpty(true);
+      } else if (input.current.value.length > 0 && isInputEmpty === true) {
+        setIsInputEmpty(false);
+      }
+    }
+  };
 
   // разворот строки
   useEffect(() => {
@@ -116,12 +128,13 @@ export const ChildrenOfStringComponent: React.FC = () => {
           isLimitText={true}
           extraClass={`${styles.input} input-in-container`}
           disabled={isStringInvert}
+          onChange={controlInputValue}
         />
         <Button 
           text='Развернуть'
           onClick={useTextInput}
           isLoader={isStringInvert}
-          disabled={isStringInvert}
+          disabled={isStringInvert || isInputEmpty}
         />
       </div>
       <div className={styles.stringsContainer}>
