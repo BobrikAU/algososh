@@ -1,6 +1,3 @@
-import { should } from "chai";
-import { each } from "cypress/types/bluebird";
-
 describe('Компонент Стек', () => {
 
   beforeEach(() => {
@@ -126,5 +123,5 @@ describe('Компонент Стек', () => {
     cy.contains('Очистить').click();
     cy.get('p[data-testid="text-in-circle"]').should('have.length', '0');
   });
-  
+
 });
