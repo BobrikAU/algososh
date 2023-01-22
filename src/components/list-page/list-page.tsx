@@ -461,7 +461,7 @@ export const ListPage: React.FC = () => {
           isLoader={state.isDeleteByIndex}
         />
       </div>
-      <div className={styles.circlesContainer}>
+      <div id='circlesContainer' className={styles.circlesContainer}>
         {circleElements}
       </div>
     </SolutionLayout>
