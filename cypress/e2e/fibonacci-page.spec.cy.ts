@@ -1,23 +1,28 @@
+import { textInCircleSelector } from '../constants';
+import { linkToFibonacci } from '../constants';
+
+const inputPlaceholder = 'input[placeholder="Введите число"]';
+const buttonName = 'Рассчитать';
+
 describe('Компонент Последовательность Фибоначчи', () => {
 
   beforeEach(() => {
-    cy.viewport(1280, 900);
-    cy.visit('localhost:3000');
-    cy.get('a[href*="fibonacci"]').click();
+    cy.visit('/');
+    cy.get(linkToFibonacci).click();
   });
 
   it('Доступность кнопки Рассчитать', () => {
-    cy.get('input[placeholder="Введите число"]').should('be.empty');
-    cy.contains('Рассчитать').should('be.disabled');
-    cy.get('input[placeholder="Введите число"]').type('10');
-    cy.contains('Рассчитать').should('be.enabled');
+    cy.get(inputPlaceholder).should('be.empty');
+    cy.contains(buttonName).should('be.disabled');
+    cy.get(inputPlaceholder).type('10');
+    cy.contains(buttonName).should('be.enabled');
   });
 
   it('Правильная генерация чисел', () => {
     const array: number[] = [];
-    cy.get('input[placeholder="Введите число"]').type('19');
-    cy.contains('Рассчитать').click();
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 20000})
+    cy.get(inputPlaceholder).type('19');
+    cy.contains(buttonName).click();
+    cy.get(textInCircleSelector, {timeout: 20000})
       .should('have.length', '20')
       .each((item, index) => {
         if (index === 0 || index === 1) {
