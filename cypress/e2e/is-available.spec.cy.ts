@@ -1,6 +1,5 @@
 
 it('Запуск приложения АЛГОСОШ', () => {
-  cy.viewport(1280, 900);
-  cy.visit('localhost:3000');
+  cy.visit('/');
   cy.contains('МБОУ АЛГОСОШ');
 });

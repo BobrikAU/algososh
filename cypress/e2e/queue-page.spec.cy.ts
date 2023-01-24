@@ -1,27 +1,39 @@
+import { 
+  textInCircleSelector, 
+  circlDefaultColor, 
+  linkToQueuePage, 
+  circlChangingColor
+} from '../constants';
+import { HEAD, TAIL } from '../../src/constants/element-captions';
+
+const inputTextPlaceholder = 'input[placeholder="Введите текст"]';
+const buttonAddText = 'Добавить';
+const buttonDeleteText = 'Удалить';
+const buttonClearText = 'Очистить';
+
 describe('Компонент Очередь', () => {
 
   beforeEach(() => {
-    cy.viewport(1280, 900);
-    cy.visit('http://localhost:3000');
-    cy.get('a[href*="queue"]').click();
+    cy.visit('/');
+    cy.get(linkToQueuePage).click();
   });
 
   it('Доступность кнопки Добавить', () => {
-    cy.get('input[placeholder="Введите текст"]').should('be.empty');
-    cy.contains('Добавить').should('be.disabled');
-    cy.get('input[placeholder="Введите текст"]').type('s');
-    cy.contains('Добавить').should('be.enabled');
+    cy.get(inputTextPlaceholder).should('be.empty');
+    cy.contains(buttonAddText).should('be.disabled');
+    cy.get(inputTextPlaceholder).type('s');
+    cy.contains(buttonAddText).should('be.enabled');
   });
 
   it('Добавление элемента в очередь', () => {
     // проверка первичного состояния элементов очереди
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.get(textInCircleSelector)
       .each((item) => {
         cy.wrap(item).should('be.empty');
       })
       .parent()
       .each((item) => {
-        cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+        cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
       })
       .prev()
       .each((item) => {
@@ -37,20 +49,20 @@ describe('Компонент Очередь', () => {
       });
 
     // добавление первого значения в очередь
-    cy.get('input[placeholder="Введите текст"]').type('a');
-    cy.contains('Добавить').click();
+    cy.get(inputTextPlaceholder).type('a');
+    cy.contains(buttonAddText).click();
     // первый шаг анимации (окрашивание элемента, в который добавляется значение)
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.get(textInCircleSelector)
       .each((item) => {
         cy.wrap(item).should('be.empty');
       })
       .parent()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+          cy.wrap(item).should('have.css', 'border-color', circlChangingColor);
         }
         else {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+          cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
         }
       })
       .prev()
@@ -66,7 +78,7 @@ describe('Компонент Очередь', () => {
         cy.wrap(item).should('be.empty');
       });
     // второй шаг анимации (внесение значения в элемент, распределение head и tail)
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 500})
+    cy.get(textInCircleSelector, {timeout: 500})
       .each((item, index) => {
         if (index === 0) {
           cy.wrap(item).should('have.text', 'a');
@@ -77,16 +89,16 @@ describe('Компонент Очередь', () => {
       .parent()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+          cy.wrap(item).should('have.css', 'border-color', circlChangingColor);
         }
         else {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+          cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
         }
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -98,13 +110,13 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
     // третий шаг анимации (возврат обычного цвета у элемента, куда добавляли новое значение)
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 500})
+    cy.get(textInCircleSelector, {timeout: 500})
       .each((item, index) => {
         if (index === 0) {
           cy.wrap(item).should('have.text', 'a');
@@ -114,12 +126,12 @@ describe('Компонент Очередь', () => {
       })
       .parent()
       .each((item) => {
-        cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+        cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -131,17 +143,17 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
 
     // добавление второго значения в очередь
-    cy.get('input[placeholder="Введите текст"]').type('bbbb');
-    cy.contains('Добавить').click();
+    cy.get(inputTextPlaceholder).type('bbbb');
+    cy.contains(buttonAddText).click();
     // первый шаг анимации (окрашивание элемента, в который добавляется значение)
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.get(textInCircleSelector)
       .each((item, index) => {
         if (index === 0) {
           cy.wrap(item).should('have.text', 'a');
@@ -152,16 +164,16 @@ describe('Компонент Очередь', () => {
       .parent()
       .each((item, index) => {
         if (index === 1) {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+          cy.wrap(item).should('have.css', 'border-color', circlChangingColor);
         }
         else {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+          cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
         }
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -173,13 +185,13 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
     // второй шаг анимации (внесение значения в элемент, распределение head и tail)
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 500})
+    cy.get(textInCircleSelector, {timeout: 500})
       .each((item, index) => {
         switch (index) {
           case 0:
@@ -195,16 +207,16 @@ describe('Компонент Очередь', () => {
       .parent()
       .each((item, index) => {
         if (index === 1) {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+          cy.wrap(item).should('have.css', 'border-color', circlChangingColor);
         }
         else {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+          cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
         }
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -216,13 +228,13 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 1) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
     // третий шаг анимации (возврат обычного цвета у элемента, куда добавляли новое значение)
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 500})
+    cy.get(textInCircleSelector, {timeout: 500})
       .each((item, index) => {
         switch (index) {
           case 0:
@@ -237,12 +249,12 @@ describe('Компонент Очередь', () => {
       })
       .parent()
       .each((item) => {
-        cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+        cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -254,7 +266,7 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 1) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -263,36 +275,36 @@ describe('Компонент Очередь', () => {
     // добавление и удаление элементов в таком количестве, чтобы tail оказалось левее head
     // tail должен иметь индекс 0, а head - индекс 1; а также проверка отрисовки
     for (let i = 0; i < 5; i++) {
-      cy.get('input[placeholder="Введите текст"]').type(`c${i}`);
-      cy.contains('Добавить').click();
-      cy.contains('Удалить').should('be.enabled');
+      cy.get(inputTextPlaceholder).type(`c${i}`);
+      cy.contains(buttonAddText).click();
+      cy.contains(buttonDeleteText).should('be.enabled');
     }
-    cy.contains('Удалить').click();
-    cy.contains('Удалить').should('be.enabled');
-    cy.get('input[placeholder="Введите текст"]').type(`dddd`);
-    cy.contains('Добавить').click();
-    cy.contains('Удалить').should('be.enabled');
+    cy.contains(buttonDeleteText).click();
+    cy.contains(buttonDeleteText).should('be.enabled');
+    cy.get(inputTextPlaceholder).type(`dddd`);
+    cy.contains(buttonAddText).click();
+    cy.contains(buttonDeleteText).should('be.enabled');
     cy.contains('bbbb')
       .parent()
-      .prev().should('have.text', 'head')
+      .prev().should('have.text', HEAD)
       .next().next().should('have.text', '1')
       .next().should('be.empty');
     cy.contains('dddd')
       .parent()
       .prev().should('be.empty')
       .next().next().should('have.text', '0')
-      .next().should('have.text', 'tail');
+      .next().should('have.text', TAIL);
   });
 
   it('Удаление элемента из очереди', () => {
     for (let i = 1; i <= 3; i++) {
-      cy.get('input[placeholder="Введите текст"]').type(`${i}${i}${i}${i}`);
-      cy.contains('Добавить').click();
-      cy.contains('Удалить').should('be.enabled');
+      cy.get(inputTextPlaceholder).type(`${i}${i}${i}${i}`);
+      cy.contains(buttonAddText).click();
+      cy.contains(buttonDeleteText).should('be.enabled');
     }
-    cy.contains('Удалить').click();
+    cy.contains(buttonDeleteText).click();
     // первый этап анимации - подсветка удалаемого элемента
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.get(textInCircleSelector)
       .each((item, index) => {
         switch (index) {
           case 0:
@@ -311,16 +323,16 @@ describe('Компонент Очередь', () => {
       .parent()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+          cy.wrap(item).should('have.css', 'border-color', circlChangingColor);
         }
         else {
-          cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+          cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
         }
       })
       .prev()
       .each((item, index) => {
         if (index === 0) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -332,13 +344,13 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
     // второй этап анимации (удаление значения, перенос head, возврат дефолтного цвета)
-    cy.get('p[data-testid="text-in-circle"]', {timeout: 500})
+    cy.get(textInCircleSelector, {timeout: 500})
       .each((item, index) => {
         switch (index) {
           case 1:
@@ -353,12 +365,12 @@ describe('Компонент Очередь', () => {
       })
       .parent()
       .each((item, index) => {
-        cy.wrap(item).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+        cy.wrap(item).should('have.css', 'border-color', circlDefaultColor);
       })
       .prev()
       .each((item, index) => {
         if (index === 1) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -370,7 +382,7 @@ describe('Компонент Очередь', () => {
       .next()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -378,9 +390,9 @@ describe('Компонент Очередь', () => {
 
     // проверка правильности отрисовки, если после удаления в очереди осталось только
     // одно значение
-    cy.contains('Удалить').click();
-    cy.contains('Удалить').should('be.enabled');
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.contains(buttonDeleteText).click();
+    cy.contains(buttonDeleteText).should('be.enabled');
+    cy.get(textInCircleSelector)
       .each((item, index) => {
         if (index === 2) {
           cy.wrap(item).should('have.text', '3333');
@@ -392,7 +404,7 @@ describe('Компонент Очередь', () => {
       .prev()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -400,16 +412,16 @@ describe('Компонент Очередь', () => {
       .next().next().next()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
       });
 
     // проверка правильности удаления единственного значения из очереди
-    cy.contains('Удалить').click();
-    cy.contains('Очистить').should('be.enabled');
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.contains(buttonDeleteText).click();
+    cy.contains(buttonClearText).should('be.enabled');
+    cy.get(textInCircleSelector)
       .each((item) => {
         cy.wrap(item).should('be.empty');
       })
@@ -417,7 +429,7 @@ describe('Компонент Очередь', () => {
       .prev()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -429,9 +441,9 @@ describe('Компонент Очередь', () => {
 
     // проверка правильности добавления элемента после того, как ранее все элементы
     // были удалены
-    cy.get('input[placeholder="Введите текст"]').type(`new`);
-    cy.contains('Добавить').click();
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.get(inputTextPlaceholder).type(`new`);
+    cy.contains(buttonAddText).click();
+    cy.get(textInCircleSelector)
       .each((item, index) => {
         if (index === 2) {
           cy.wrap(item).should('have.text', 'new');
@@ -443,7 +455,7 @@ describe('Компонент Очередь', () => {
       .prev()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'head');
+          cy.wrap(item).should('have.text', HEAD);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -451,7 +463,7 @@ describe('Компонент Очередь', () => {
       .next().next().next()
       .each((item, index) => {
         if (index === 2) {
-          cy.wrap(item).should('have.text', 'tail');
+          cy.wrap(item).should('have.text', TAIL);
         } else {
           cy.wrap(item).should('be.empty');
         }
@@ -460,12 +472,12 @@ describe('Компонент Очередь', () => {
 
   it('Очистка очереди', () => {
     for (let i = 1; i <= 3; i++) {
-      cy.get('input[placeholder="Введите текст"]').type(`${i}${i}${i}${i}`);
-      cy.contains('Добавить').click();
-      cy.contains('Удалить').should('be.enabled');
+      cy.get(inputTextPlaceholder).type(`${i}${i}${i}${i}`);
+      cy.contains(buttonAddText).click();
+      cy.contains(buttonDeleteText).should('be.enabled');
     }
-    cy.contains('Очистить').click();
-    cy.get('p[data-testid="text-in-circle"]')
+    cy.contains(buttonClearText).click();
+    cy.get(textInCircleSelector)
       .each((item) => {
         cy.wrap(item).should('be.empty');
       })
@@ -475,7 +487,7 @@ describe('Компонент Очередь', () => {
         cy.wrap(item).should('be.empty');
       })
       .next().next().next()
-      .each((item, index) => {
+      .each((item) => {
         cy.wrap(item).should('be.empty');
       });
   });
