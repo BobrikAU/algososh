@@ -20,7 +20,12 @@ interface IIsSorting {
   method: string;
 }
 
-export const SortingPage: React.FC = () => {
+interface IChildrenOfSortingPage {
+  propsNumber?: number | undefined;
+}
+
+export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = 
+  ({propsNumber = undefined}) => {
 
   // данные об элементах-колонках в сортируемом-массиве
   const [ numberArray, setNumberArray ] = useState<INumberArray[]>([]);
@@ -31,7 +36,9 @@ export const SortingPage: React.FC = () => {
 
   // формирование данных о массиве для сортировки
   const getNewArray = () => {
-    const quantity = Math.round((Math.random() * 14) + 3);
+    const quantity = (propsNumber === undefined) ? 
+      Math.round((Math.random() * 14) + 3) : 
+      propsNumber;
     const array: INumberArray[] = [];
     for (let i = 1; i <= quantity; i++) {
       array.push({
@@ -258,15 +265,19 @@ export const SortingPage: React.FC = () => {
   }
 
   const sortArray = (direction: string) => {
-    if (isMethodChoice) {
+    if (numberArray.length === 1) {
+      setTimeout(() => {
+        numberArray[0].state = ElementStates.Modified;
+      }, SHORT_DELAY_IN_MS)
+    } else if (isMethodChoice && numberArray.length > 1) {
       sortArrayChoice(direction)
-    } else {
+    } else if (!isMethodChoice && numberArray.length > 1) {
       sortArrayBubble(direction);
     }
   }
 
   return (
-    <SolutionLayout title="Сортировка массива">
+    <>
       <div className={styles.controlContainer}>
         <RadioInput
           label="Выбор"
@@ -319,6 +330,15 @@ export const SortingPage: React.FC = () => {
       <div className={styles.columnsContainer}>
         {numberArray.length > 0 && colunmsArray}
       </div>
+    </>
+  )
+};
+
+export const SortingPage: React.FC = () => {
+
+  return (
+    <SolutionLayout title="Сортировка массива">
+      <ChildrenOfSortingPage/>
     </SolutionLayout>
   );
 };
