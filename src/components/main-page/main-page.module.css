@@ -34,6 +34,12 @@
   margin-left: -6px;
 }
 
+.languages_switch {
+  position: absolute;
+  top: calc(50% - 280px);
+  left: calc(50% - 620px);
+}
+
 .cards_box {
   display: grid;
   grid-template-rows: 1fr 1fr;

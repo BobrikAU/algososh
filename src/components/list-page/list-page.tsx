@@ -11,27 +11,31 @@ import { LinkedList } from "./linkedList";
 import { LinkedListNode } from "./linkedListNode";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { HEAD, TAIL } from "../../constants/element-captions";
+import type { UsedLanguageContextType } from "../../context/languageContext";
 
-interface ILinkedListNode{
+interface IListPage {
+  changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
+}
+
+interface ILinkedListNode {
   string: string;
   state: ElementStates;
   uuid: string;
-  head: string | React.ReactElement |  null;
-  tail: string | React.ReactElement |  null;
+  head: string | React.ReactElement | null;
+  tail: string | React.ReactElement | null;
 }
 
-export const ListPage: React.FC = () => {
-
+export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
   // состояние для принудительного рендеринга
-  const [ , setNewRender ] = useState<string>(nanoid());
+  const [, setNewRender] = useState<string>(nanoid());
   // состояние поля input со значением нового элемента списка
-  const [ isStringInputEmpty, setIsStringInputEmpty ] = useState(true);
+  const [isStringInputEmpty, setIsStringInputEmpty] = useState(true);
   // состояние поля input со значением индекса элемента
-  const [ isIndexInputEmpty, setIsIndexInputEmpty ] = useState(true);
+  const [isIndexInputEmpty, setIsIndexInputEmpty] = useState(true);
   // значение поля input с индексом не превышает / превышает индекс последнего элемента списка
-  const [ isIndexFit, setIsIndexFit ] = useState(true);
+  const [isIndexFit, setIsIndexFit] = useState(true);
   // состояние функционирования алгоритма работы списка и его методов
-  const [ state, setState ] = useState({
+  const [state, setState] = useState({
     isAlgoritmWork: false,
     isAddHead: false,
     isAddTail: false,
@@ -56,7 +60,7 @@ export const ListPage: React.FC = () => {
         uuid: nanoid(),
         head: i === 0 ? HEAD : null,
         tail: i === numberArray.current.length - 1 ? TAIL : null,
-      })
+      });
     }
   }
 
@@ -66,16 +70,20 @@ export const ListPage: React.FC = () => {
   // создание переменной input, где вводятся значения новых элементов связанного списка
   const stringInputRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
-    stringInputRef.current = 
-      document.querySelector('.input-string-container > .text_type_input');
+    stringInputRef.current = document.querySelector(
+      ".input-string-container > .text_type_input"
+    );
   }, []);
   // проверка поля input на наличие в нем новых значений
   const checkStringInput = () => {
-    if (stringInputRef.current && stringInputRef.current.value !== '') {
+    if (stringInputRef.current && stringInputRef.current.value !== "") {
       setIsStringInputEmpty(false);
     }
-    if (stringInputRef.current && stringInputRef.current.value === '' && 
-      isStringInputEmpty === false) {
+    if (
+      stringInputRef.current &&
+      stringInputRef.current.value === "" &&
+      isStringInputEmpty === false
+    ) {
       setIsStringInputEmpty(true);
     }
   };
@@ -83,35 +91,36 @@ export const ListPage: React.FC = () => {
   // создание переменной input, где определяется индекс элемента
   const indexInputRef = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
-    indexInputRef.current = 
-      document.querySelector('.input-index-container > .text_type_input');
+    indexInputRef.current = document.querySelector(
+      ".input-index-container > .text_type_input"
+    );
   }, []);
   // проверка поля input на наличие в нем индекса
   const checkIndexInput = () => {
-    if (indexInputRef.current && indexInputRef.current.value !== '') {
+    if (indexInputRef.current && indexInputRef.current.value !== "") {
       setIsIndexInputEmpty(false);
     }
-    if (indexInputRef.current && isIndexFit === true &&
-        Number(indexInputRef.current.value) >= linkedList.current.length) {
+    if (
+      indexInputRef.current &&
+      isIndexFit === true &&
+      Number(indexInputRef.current.value) >= linkedList.current.length
+    ) {
       setIsIndexFit(false);
     }
-    
-    if (indexInputRef.current && isIndexFit === false &&
-        Number(indexInputRef.current.value) < linkedList.current.length) {
+
+    if (
+      indexInputRef.current &&
+      isIndexFit === false &&
+      Number(indexInputRef.current.value) < linkedList.current.length
+    ) {
       setIsIndexFit(true);
     }
 
-
-
-
-
-
-
-
-
-
-    if (indexInputRef.current && indexInputRef.current.value === '' && 
-      isIndexInputEmpty === false) {
+    if (
+      indexInputRef.current &&
+      indexInputRef.current.value === "" &&
+      isIndexInputEmpty === false
+    ) {
       setIsIndexInputEmpty(true);
     }
   };
@@ -119,21 +128,23 @@ export const ListPage: React.FC = () => {
   // создание описания добавляемого элемента списка
   function creatNewElement(partList: string): ILinkedListNode {
     return {
-      string: stringInputRef.current ? stringInputRef.current.value : '',
+      string: stringInputRef.current ? stringInputRef.current.value : "",
       state: ElementStates.Modified,
       uuid: nanoid(),
       head: partList === HEAD ? HEAD : null,
       tail: partList === TAIL ? TAIL : null,
-    }
+    };
   }
 
   // создание маленького круга для анимации
   function creatSmallCircle(Element: ILinkedListNode) {
-    return <Circle
-      state={ElementStates.Changing}
-      letter={Element.string}
-      isSmall={true}
-    />
+    return (
+      <Circle
+        state={ElementStates.Changing}
+        letter={Element.string}
+        isSmall={true}
+      />
+    );
   }
 
   // добавление нового head
@@ -153,7 +164,7 @@ export const ListPage: React.FC = () => {
       setTimeout(() => {
         linkedList.current.head.value.state = ElementStates.Default;
         if (stringInputRef.current) {
-          stringInputRef.current.value = '';
+          stringInputRef.current.value = "";
         }
         setIsStringInputEmpty(true);
         setState({
@@ -161,7 +172,7 @@ export const ListPage: React.FC = () => {
           isAlgoritmWork: false,
           isAddHead: false,
         });
-      }, SHORT_DELAY_IN_MS)
+      }, SHORT_DELAY_IN_MS);
     }, SHORT_DELAY_IN_MS);
   };
 
@@ -170,7 +181,9 @@ export const ListPage: React.FC = () => {
     const newElement = creatNewElement(TAIL);
     const smallCircle = creatSmallCircle(newElement);
     const currTail = linkedList.current.tail;
-    if (currTail) {currTail.value.head = smallCircle};
+    if (currTail) {
+      currTail.value.head = smallCircle;
+    }
     setState({
       ...state,
       isAlgoritmWork: true,
@@ -186,7 +199,7 @@ export const ListPage: React.FC = () => {
       setTimeout(() => {
         newElement.state = ElementStates.Default;
         if (stringInputRef.current) {
-          stringInputRef.current.value = '';
+          stringInputRef.current.value = "";
         }
         setIsStringInputEmpty(true);
         setState({
@@ -194,7 +207,7 @@ export const ListPage: React.FC = () => {
           isAlgoritmWork: false,
           isAddTail: false,
         });
-      }, SHORT_DELAY_IN_MS)
+      }, SHORT_DELAY_IN_MS);
     }, SHORT_DELAY_IN_MS);
   };
 
@@ -202,7 +215,7 @@ export const ListPage: React.FC = () => {
   const deleteHead = () => {
     const smallCircle = creatSmallCircle(linkedList.current.head.value);
     linkedList.current.head.value.tail = smallCircle;
-    linkedList.current.head.value.string = '';
+    linkedList.current.head.value.string = "";
     setState({
       ...state,
       isAlgoritmWork: true,
@@ -216,7 +229,7 @@ export const ListPage: React.FC = () => {
         isAlgoritmWork: false,
         isDeleteHead: false,
       });
-    }, SHORT_DELAY_IN_MS)
+    }, SHORT_DELAY_IN_MS);
   };
 
   // удаление tail
@@ -225,7 +238,7 @@ export const ListPage: React.FC = () => {
     if (currTail) {
       const smallCircle = creatSmallCircle(currTail.value);
       currTail.value.tail = smallCircle;
-      currTail.value.string = '';
+      currTail.value.string = "";
     }
     setState({
       ...state,
@@ -242,17 +255,19 @@ export const ListPage: React.FC = () => {
         isAlgoritmWork: false,
         isDeleteTail: false,
       });
-    }, SHORT_DELAY_IN_MS)
+    }, SHORT_DELAY_IN_MS);
   };
 
   // добавление элемента списка по индексу
   const addByIndex = () => {
-    const newElement = creatNewElement('');
+    const newElement = creatNewElement("");
     const smallCircle = creatSmallCircle(newElement);
     const elementsArray: LinkedListNode<ILinkedListNode>[] = [];
-    let currElement: LinkedListNode<ILinkedListNode> | null = linkedList.current.head;
+    let currElement: LinkedListNode<ILinkedListNode> | null =
+      linkedList.current.head;
     let index = 0;
-    const inputIndex = indexInputRef.current && Number(indexInputRef.current.value);
+    const inputIndex =
+      indexInputRef.current && Number(indexInputRef.current.value);
     currElement.value.head = smallCircle;
     setState({
       ...state,
@@ -264,7 +279,7 @@ export const ListPage: React.FC = () => {
         if (currElement === linkedList.current.head) {
           currElement.value.head = HEAD;
         } else {
-          currElement.value.head = '';
+          currElement.value.head = "";
         }
         currElement.value.state = ElementStates.Changing;
         elementsArray.push(currElement);
@@ -277,22 +292,25 @@ export const ListPage: React.FC = () => {
         setTimeout(move, SHORT_DELAY_IN_MS);
       } else {
         setTimeout(() => {
-          const newListElement = linkedList.current.addByIndex(newElement, index);
+          const newListElement = linkedList.current.addByIndex(
+            newElement,
+            index
+          );
           elementsArray.push(newListElement);
           if (currElement !== null) {
-            currElement.value.head = '';
+            currElement.value.head = "";
           }
           if (inputIndex === 0) {
             newListElement.value.head = HEAD;
           }
           setNewRender(nanoid());
           setTimeout(() => {
-            elementsArray.forEach(item => {
+            elementsArray.forEach((item) => {
               item.value.state = ElementStates.Default;
             });
             if (stringInputRef.current && indexInputRef.current) {
-              stringInputRef.current.value = '';
-              indexInputRef.current.value = '';
+              stringInputRef.current.value = "";
+              indexInputRef.current.value = "";
             }
             setIsStringInputEmpty(true);
             setIsIndexInputEmpty(true);
@@ -301,10 +319,10 @@ export const ListPage: React.FC = () => {
               isAlgoritmWork: false,
               isAddByIndex: false,
             });
-          }, SHORT_DELAY_IN_MS)
+          }, SHORT_DELAY_IN_MS);
         }, SHORT_DELAY_IN_MS);
       }
-    }, SHORT_DELAY_IN_MS)
+    }, SHORT_DELAY_IN_MS);
   };
 
   // удаление элемента списка по индексу
@@ -331,11 +349,13 @@ export const ListPage: React.FC = () => {
           setTimeout(findElementByIndex, SHORT_DELAY_IN_MS);
         } else {
           setTimeout(() => {
-            const currListNode = linkedList.current.getElementByPositionNumber(inputIndex + 1);
+            const currListNode = linkedList.current.getElementByPositionNumber(
+              inputIndex + 1
+            );
             const smallCircle = creatSmallCircle(currListNode.value);
             currListNode.value.tail = smallCircle;
             currListNode.value.state = ElementStates.Default;
-            currListNode.value.string = '';
+            currListNode.value.string = "";
             setNewRender(nanoid());
             setTimeout(() => {
               linkedList.current.deleteByIndex(inputIndex);
@@ -347,11 +367,11 @@ export const ListPage: React.FC = () => {
               }
               setNewRender(nanoid());
               setTimeout(() => {
-                elementsArray.forEach(item => {
+                elementsArray.forEach((item) => {
                   item.value.state = ElementStates.Default;
                 });
                 if (indexInputRef.current) {
-                  indexInputRef.current.value = ''
+                  indexInputRef.current.value = "";
                 }
                 setIsIndexInputEmpty(true);
                 setState({
@@ -363,13 +383,14 @@ export const ListPage: React.FC = () => {
             }, SHORT_DELAY_IN_MS);
           }, SHORT_DELAY_IN_MS);
         }
-      }); 
+      });
     }
   };
 
   // создание списка JSX-элементов, визуализирующих связной список
-  const creatCircleElements = (linkedListHead: LinkedListNode<ILinkedListNode>): 
-    JSX.Element[] => {
+  const creatCircleElements = (
+    linkedListHead: LinkedListNode<ILinkedListNode>
+  ): JSX.Element[] => {
     const array: JSX.Element[] = [];
     let listElement: LinkedListNode<ILinkedListNode> | null = linkedListHead;
     let index = 0;
@@ -385,22 +406,24 @@ export const ListPage: React.FC = () => {
               tail={listElement.value.tail}
               extraClass={styles.circle}
             />
-            {listElement.next !== null && <ArrowIcon/>}
+            {listElement.next !== null && <ArrowIcon />}
           </div>
-        )
+        );
         index++;
         listElement = listElement.next;
       }
     } while (listElement !== null);
     return array;
   };
-  const circleElements: JSX.Element[] = creatCircleElements(linkedList.current.head);
+  const circleElements: JSX.Element[] = creatCircleElements(
+    linkedList.current.head
+  );
 
   return (
-    <SolutionLayout title="Связный список">
+    <SolutionLayout title="Связный список" changeLanguage={changeLanguage}>
       <div className={styles.controlContainer}>
         <Input
-          placeholder = "Введите значение"
+          placeholder="Введите значение"
           maxLength={4}
           extraClass={`${styles.input} input-string-container`}
           onChange={checkStringInput}
@@ -438,7 +461,7 @@ export const ListPage: React.FC = () => {
           isLoader={state.isDeleteTail}
         />
         <Input
-          placeholder = "Введите индекс"
+          placeholder="Введите индекс"
           type="number"
           maxLength={4}
           extraClass={`${styles.input} input-index-container`}
@@ -449,7 +472,12 @@ export const ListPage: React.FC = () => {
           text="Добавить по индексу"
           linkedList="big"
           extraClass={styles.button}
-          disabled={isStringInputEmpty || isIndexInputEmpty || state.isAlgoritmWork || !isIndexFit}
+          disabled={
+            isStringInputEmpty ||
+            isIndexInputEmpty ||
+            state.isAlgoritmWork ||
+            !isIndexFit
+          }
           onClick={addByIndex}
           isLoader={state.isAddByIndex}
         />
@@ -461,7 +489,7 @@ export const ListPage: React.FC = () => {
           isLoader={state.isDeleteByIndex}
         />
       </div>
-      <div id='circlesContainer' className={styles.circlesContainer}>
+      <div id="circlesContainer" className={styles.circlesContainer}>
         {circleElements}
       </div>
     </SolutionLayout>

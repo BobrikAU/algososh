@@ -1,17 +1,21 @@
 import React from "react";
 import { ReturnButton } from "../return-button/return-button";
 import { Link } from "react-router-dom";
+import { LanguagesSwitch } from "../../languages-switch/languages-switch";
 import styles from "./solution-layout.module.css";
+import type { UsedLanguageContextType } from "../../../context/languageContext";
 
 interface SolutionLayoutProps {
   title: string;
   extraClass?: string;
+  changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
 }
 
 export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
   extraClass = "",
   title,
   children,
+  changeLanguage,
 }) => {
   return (
     <main className={`${styles.content} ${extraClass}`}>
@@ -25,6 +29,10 @@ export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
           им. Фибоначчи
         </span>
       </div>
+      <LanguagesSwitch
+        changeLanguage={changeLanguage}
+        extraClass={styles.languages_switch}
+      ></LanguagesSwitch>
       <div className={styles.contentCard}>
         <Link className={styles.link} to="/">
           <ReturnButton extraClass={styles.returnButton} />

@@ -8,6 +8,11 @@ import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { nanoid } from "nanoid";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import type { UsedLanguageContextType } from "../../context/languageContext";
+
+interface ISortingPage {
+  changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
+}
 
 interface INumberArray {
   number: number;
@@ -24,25 +29,29 @@ interface IChildrenOfSortingPage {
   propsNumber?: number | undefined;
 }
 
-export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = 
-  ({propsNumber = undefined}) => {
-
+export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
+  propsNumber = undefined,
+}) => {
   // данные об элементах-колонках в сортируемом-массиве
-  const [ numberArray, setNumberArray ] = useState<INumberArray[]>([]);
+  const [numberArray, setNumberArray] = useState<INumberArray[]>([]);
   // выбранный метод сортировки
-  const [ isMethodChoice, setIsMethodChoice ] = useState<boolean>(true);
+  const [isMethodChoice, setIsMethodChoice] = useState<boolean>(true);
   // состояние процесса сортировки
-  const [ isSorting, setIsSorting ] = useState<IIsSorting>({state: false, method:''});
+  const [isSorting, setIsSorting] = useState<IIsSorting>({
+    state: false,
+    method: "",
+  });
 
   // формирование данных о массиве для сортировки
   const getNewArray = () => {
-    const quantity = (propsNumber === undefined) ? 
-      Math.round((Math.random() * 14) + 3) : 
-      propsNumber;
+    const quantity =
+      propsNumber === undefined
+        ? Math.round(Math.random() * 14 + 3)
+        : propsNumber;
     const array: INumberArray[] = [];
     for (let i = 1; i <= quantity; i++) {
       array.push({
-        number: Math.round((Math.random() * 100)),
+        number: Math.round(Math.random() * 100),
         state: ElementStates.Default,
         uuid: nanoid(),
       });
@@ -54,14 +63,14 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
   }, []);
 
   // формирование массива для сортировки
-  const colunmsArray = numberArray.map(item => 
-    <Column 
+  const colunmsArray = numberArray.map((item) => (
+    <Column
       index={item.number}
       state={item.state}
       extraClass={styles.column}
       key={item.uuid}
     />
-  );
+  ));
 
   // смена метода сортировки
   const changeMethod = () => {
@@ -70,10 +79,13 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
 
   // сортировка
   // глубокое копирование массива с данными об элементах-колонках
-  function madeNewArray(datasArray: INumberArray[], changeColor: boolean = false) {
+  function madeNewArray(
+    datasArray: INumberArray[],
+    changeColor: boolean = false
+  ) {
     const array: INumberArray[] = [];
     for (let i = 0; i < datasArray.length; i++) {
-      array[i] = {...datasArray[i]}
+      array[i] = { ...datasArray[i] };
       if (changeColor) {
         array[i].state = ElementStates.Default;
       }
@@ -85,12 +97,12 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
   function restoreColorColumns(datasArray: INumberArray[]) {
     const newArray = madeNewArray(datasArray, true);
     setNumberArray(newArray);
-    return newArray
+    return newArray;
   }
 
   // сортировка пузырьком
   const sortArrayBubble = (direction: string) => {
-    setIsSorting({state: true, method: direction});
+    setIsSorting({ state: true, method: direction });
     // переменная с актуальным значением массива данных об элементах-колонках
     let datasArray = numberArray;
     // переменная с информацией о том, были ли изменения при последней итерации
@@ -103,15 +115,19 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
       const newArray = madeNewArray(datasArray);
       newArray[first].state = ElementStates.Changing;
       newArray[second].state = ElementStates.Changing;
-      if ((direction === "ascending" && newArray[first].number >= newArray[second].number) ||
-          (direction === "descending" && newArray[first].number <= newArray[second].number)){
+      if (
+        (direction === "ascending" &&
+          newArray[first].number >= newArray[second].number) ||
+        (direction === "descending" &&
+          newArray[first].number <= newArray[second].number)
+      ) {
         const temp = newArray[first];
         newArray[first] = newArray[second];
         newArray[second] = temp;
         isChangeInLastIteration = true;
       }
       if (first !== 0) {
-        newArray[first-1].state = ElementStates.Default;
+        newArray[first - 1].state = ElementStates.Default;
       }
       setNumberArray(newArray);
       datasArray = newArray;
@@ -129,7 +145,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
     // фиксирование позиций оставшихся колонок, когда последняя интерация ничего не изменила
     function fixLastColunms(lastColumnNumber: number): void {
       const newArray = madeNewArray(datasArray);
-      for (let i = 0; i <= lastColumnNumber - 1; i++){
+      for (let i = 0; i <= lastColumnNumber - 1; i++) {
         newArray[i].state = ElementStates.Modified;
       }
       setNumberArray(newArray);
@@ -155,18 +171,20 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
             setTimeout(() => {
               miniIteration();
               // определение необходимости фиксировать последнюю колонку
-              if(secondColumn + 1 === lastColumnNumber) {
+              if (secondColumn + 1 === lastColumnNumber) {
                 setTimeout(() => {
                   fixPosition(lastColumnNumber);
                   // выбираем: новая итерация или фиксация оставшихся слева колонок
-                  if (numberIteration < datasArray.length && 
-                    isChangeInLastIteration === true) {
+                  if (
+                    numberIteration < datasArray.length &&
+                    isChangeInLastIteration === true
+                  ) {
                     setTimeout(iteration, SHORT_DELAY_IN_MS);
-                  } 
+                  }
                   if (isChangeInLastIteration === false) {
                     setTimeout(() => {
                       fixLastColunms(lastColumnNumber);
-                      setIsSorting({state: false, method:''});
+                      setIsSorting({ state: false, method: "" });
                     }, SHORT_DELAY_IN_MS);
                   }
                 }, SHORT_DELAY_IN_MS);
@@ -175,20 +193,20 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
           } else if (lastColumnNumber === 1) {
             setTimeout(() => {
               fixLastColunms(lastColumnNumber + 1);
-              setIsSorting({state: false, method:''});
+              setIsSorting({ state: false, method: "" });
             }, SHORT_DELAY_IN_MS);
           }
           firstColumn++;
         });
         numberIteration++;
-      })()
+      })();
     }, SHORT_DELAY_IN_MS);
-  }
+  };
 
   // сортировка выбором
   const sortArrayChoice = (direction: string): void => {
     // перевод кнопок в нерабочее состояние на время сортировки
-    setIsSorting({state: true, method: direction});
+    setIsSorting({ state: true, method: direction });
     // переменная с актуальным значением массива данных об элементах-колонках
     let datasArray = numberArray;
     datasArray = madeNewArray(datasArray);
@@ -212,16 +230,21 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
         setTimeout(function miniIteration() {
           // визуализация перехода от одной колонки к другой для сравнения их значения
           datasArray = madeNewArray(datasArray);
-          datasArray[comparisonIndex].state = datasArray && ElementStates.Changing;
+          datasArray[comparisonIndex].state =
+            datasArray && ElementStates.Changing;
           if (comparisonIndex - 1 > currentIndex) {
             datasArray[comparisonIndex - 1].state = ElementStates.Default;
           }
           setNumberArray(datasArray);
           // сравнение значений колнок с индексами valueIndex и comparisonIndex
-          if ((direction === "ascending" && 
-              datasArray[comparisonIndex].number < datasArray[valueIndex].number) || 
-              (direction === "descending" && 
-              datasArray[comparisonIndex].number > datasArray[valueIndex].number)) {
+          if (
+            (direction === "ascending" &&
+              datasArray[comparisonIndex].number <
+                datasArray[valueIndex].number) ||
+            (direction === "descending" &&
+              datasArray[comparisonIndex].number >
+                datasArray[valueIndex].number)
+          ) {
             valueIndex = comparisonIndex;
           }
           // определение необходимости в новой миниитерации (просмотрены ли все значения)
@@ -244,8 +267,10 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
               datasArray[lastIndex].state = ElementStates.Default;
               setNumberArray(datasArray);
               // определение необходимости в новом проходе по незафикисрованной части массива
-              if (currentIndex < lastIndex -1 ) {
-                setTimeout(() => {iteration(currentIndex + 1)});
+              if (currentIndex < lastIndex - 1) {
+                setTimeout(() => {
+                  iteration(currentIndex + 1);
+                });
               } else {
                 // фиксация цветом последней колонки, если новый проход по массиву не нужен
                 setTimeout(() => {
@@ -253,7 +278,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
                   datasArray[lastIndex].state = ElementStates.Modified;
                   setNumberArray(datasArray);
                   // перевод кнопок в рабочее состояние после окончания сортировки
-                  setIsSorting({state: false, method:''});
+                  setIsSorting({ state: false, method: "" });
                 }, SHORT_DELAY_IN_MS);
               }
             }, SHORT_DELAY_IN_MS);
@@ -262,19 +287,19 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
         }, SHORT_DELAY_IN_MS);
       }
     );
-  }
+  };
 
   const sortArray = (direction: string) => {
     if (numberArray.length === 1) {
       setTimeout(() => {
         numberArray[0].state = ElementStates.Modified;
-      }, SHORT_DELAY_IN_MS)
+      }, SHORT_DELAY_IN_MS);
     } else if (isMethodChoice && numberArray.length > 1) {
-      sortArrayChoice(direction)
+      sortArrayChoice(direction);
     } else if (!isMethodChoice && numberArray.length > 1) {
       sortArrayBubble(direction);
     }
-  }
+  };
 
   return (
     <>
@@ -297,29 +322,29 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
           onClick={changeMethod}
           disabled={isSorting.state}
         />
-        <Button 
+        <Button
           type="button"
           text="По возрастанию"
           sorting={Direction.Ascending}
           extraClass={styles.button}
           onClick={() => {
-            sortArray("ascending")
+            sortArray("ascending");
           }}
           isLoader={isSorting.method === "ascending"}
           disabled={isSorting.state}
         />
-        <Button 
+        <Button
           type="button"
           text="По убыванию"
           sorting={Direction.Descending}
           extraClass={styles.button}
           onClick={() => {
-            sortArray("descending")
+            sortArray("descending");
           }}
           isLoader={isSorting.method === "descending"}
           disabled={isSorting.state}
         />
-        <Button 
+        <Button
           type="button"
           text="Новый массив"
           extraClass={styles.button}
@@ -331,14 +356,13 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> =
         {numberArray.length > 0 && colunmsArray}
       </div>
     </>
-  )
+  );
 };
 
-export const SortingPage: React.FC = () => {
-
+export const SortingPage: React.FC<ISortingPage> = ({ changeLanguage }) => {
   return (
-    <SolutionLayout title="Сортировка массива">
-      <ChildrenOfSortingPage/>
+    <SolutionLayout title="Сортировка массива" changeLanguage={changeLanguage}>
+      <ChildrenOfSortingPage />
     </SolutionLayout>
   );
 };

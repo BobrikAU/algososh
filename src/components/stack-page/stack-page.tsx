@@ -8,48 +8,55 @@ import { nanoid } from "nanoid";
 import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Stack } from "./stack";
+import type { UsedLanguageContextType } from "../../context/languageContext";
 
-interface IStringElement{
+interface IStackPage {
+  changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
+}
+
+interface IStringElement {
   string: string;
   state: ElementStates;
   key: string;
 }
 
-interface IState{
+interface IState {
   isAlgoritmWork: boolean;
   isAdding: boolean;
   isRemoval: boolean;
 }
 
-export const StackPage: React.FC = () => {
-
+export const StackPage: React.FC<IStackPage> = ({ changeLanguage }) => {
   // переключатель для принудительного рендеринга
-  const [ newRender, setNewRender ] = useState<boolean>(false);
+  const [newRender, setNewRender] = useState<boolean>(false);
   // показатель наличия текста в поле input
-  const [ isTextInInput, setIsTextInInput ] = useState<boolean>(false);
+  const [isTextInInput, setIsTextInInput] = useState<boolean>(false);
   // состояние работы алгоритма
-  const [ state, setState ] = useState<IState>({
+  const [state, setState] = useState<IState>({
     isAlgoritmWork: false,
     isAdding: false,
     isRemoval: false,
   });
 
   // поле input
-  const inputRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const inputRef: React.MutableRefObject<HTMLInputElement | null> =
+    useRef(null);
   useEffect(() => {
-    inputRef.current = document.querySelector('.input-in-container > .text_type_input');
+    inputRef.current = document.querySelector(
+      ".input-in-container > .text_type_input"
+    );
   }, []);
   // экземпляр класса Stack
   const stack = useRef(new Stack<IStringElement>());
-  
+
   // определение наличия текста в поле input
   const checkTextInInput = () => {
-    if (inputRef.current?.value !== '') {
+    if (inputRef.current?.value !== "") {
       setIsTextInInput(true);
     } else {
       setIsTextInInput(false);
     }
-  }
+  };
 
   // добавление элемента в Stack
   const addElementInStack = () => {
@@ -64,12 +71,12 @@ export const StackPage: React.FC = () => {
         state: ElementStates.Changing,
         key: nanoid(),
       });
-      inputRef.current.value = '';
+      inputRef.current.value = "";
       setIsTextInInput(false);
     }
     setNewRender(!newRender);
     setTimeout(() => {
-      stack.current.getStack()[stack.current.getStackLength() - 1].state = 
+      stack.current.getStack()[stack.current.getStackLength() - 1].state =
         ElementStates.Default;
       setState({
         isAlgoritmWork: false,
@@ -86,7 +93,7 @@ export const StackPage: React.FC = () => {
       isAdding: false,
       isRemoval: true,
     });
-    stack.current.getStack()[stack.current.getStackLength() - 1].state = 
+    stack.current.getStack()[stack.current.getStackLength() - 1].state =
       ElementStates.Changing;
     setNewRender(!newRender);
     setTimeout(() => {
@@ -108,19 +115,21 @@ export const StackPage: React.FC = () => {
   // формирование JSX-элементов для отображения содержания Stack
   const circleElements = stack.current.getStack().map((item, index) => {
     if (20 - stack.current.getStackLength() + index >= 0) {
-      return <Circle
-        state={item.state}
-        letter={item.string}
-        head={index === stack.current.getStackLength() -1 ? "top" : null}
-        index={index}
-        extraClass={styles.circle}
-        key={item.key}
-      />
+      return (
+        <Circle
+          state={item.state}
+          letter={item.string}
+          head={index === stack.current.getStackLength() - 1 ? "top" : null}
+          index={index}
+          extraClass={styles.circle}
+          key={item.key}
+        />
+      );
     }
   });
 
   return (
-    <SolutionLayout title="Стек">
+    <SolutionLayout title="Стек" changeLanguage={changeLanguage}>
       <div className={styles.controlContainer}>
         <Input
           extraClass={`${styles.input} input-in-container`}
@@ -140,18 +149,22 @@ export const StackPage: React.FC = () => {
           text="Удалить"
           extraClass={styles.buttonDelette}
           onClick={deleteElementInStack}
-          disabled={stack.current.getStackLength() === 0 || state.isAlgoritmWork}
+          disabled={
+            stack.current.getStackLength() === 0 || state.isAlgoritmWork
+          }
           isLoader={state.isRemoval}
         />
         <Button
           text="Очистить"
           extraClass={styles.buttonReset}
           onClick={reset}
-          disabled={stack.current.getStackLength() === 0 || state.isAlgoritmWork}
+          disabled={
+            stack.current.getStackLength() === 0 || state.isAlgoritmWork
+          }
         />
       </div>
       <div className={styles.circlesContainer}>
-        {circleElements && circleElements}      
+        {circleElements && circleElements}
       </div>
     </SolutionLayout>
   );

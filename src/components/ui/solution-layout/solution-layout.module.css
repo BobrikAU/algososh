@@ -17,6 +17,12 @@
   margin: auto 0 8px 7px;
 }
 
+.languages_switch {
+  position: absolute;
+  top: calc(50% - 370px);
+  left: 20px;
+}
+
 .contentCard {
   background: #ffffff;
   border-radius: 20px;
