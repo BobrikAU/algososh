@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./input.module.css";
+import { text } from "../../../constants/text";
+import { UsedLanguageContext } from "../../../context/languageContext";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
@@ -8,7 +10,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 export const Input: React.FC<InputProps> = ({
-  placeholder = "Введите текст",
+  placeholder,
   extraClass = "",
   type = "text",
   maxLength,
@@ -16,10 +18,16 @@ export const Input: React.FC<InputProps> = ({
   isLimitText = false,
   ...rest
 }) => {
+  const lang = useContext(UsedLanguageContext);
+  if (!placeholder) {
+    placeholder = text.ui.input.placeholder[lang];
+  }
   const limitText =
-    type === "text"
-      ? `Максимум — ${maxLength} символа`
-      : `Максимальное число — ${max}`;
+    type === "text" && maxLength
+      ? text.ui.input.limitText.typeText[lang](maxLength)
+      : type !== "text" && max
+      ? text.ui.input.limitText.typeNumber[lang](max)
+      : "";
 
   return (
     <div className={`${styles.content} ${extraClass}`}>

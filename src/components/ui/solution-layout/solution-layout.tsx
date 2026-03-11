@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ReturnButton } from "../return-button/return-button";
 import { Link } from "react-router-dom";
 import { LanguagesSwitch } from "../../languages-switch/languages-switch";
 import styles from "./solution-layout.module.css";
 import type { UsedLanguageContextType } from "../../../context/languageContext";
+import { text } from "../../../constants/text";
+import { UsedLanguageContext } from "../../../context/languageContext";
 
 interface SolutionLayoutProps {
   title: string;
@@ -17,16 +19,17 @@ export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
   children,
   changeLanguage,
 }) => {
+  const lang = useContext(UsedLanguageContext);
   return (
     <main className={`${styles.content} ${extraClass}`}>
       <div className={styles.titleBox}>
         <h1 className={`text text_type_h2 text_color_h1 ${styles.title}`}>
-          МБОУ АЛГОСОШ
+          {text.ui.solutionLayout.title[lang]}
         </h1>
         <span
           className={`text text_type_fibonacci text_color_secondary ${styles.subtitle}`}
         >
-          им. Фибоначчи
+          {text.ui.solutionLayout.subtitle[lang]}
         </span>
       </div>
       <LanguagesSwitch
@@ -45,7 +48,7 @@ export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
       <p
         className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
-        © Сделано в Практикуме.
+        {text.ui.solutionLayout.copyright[lang]}
       </p>
     </main>
   );
