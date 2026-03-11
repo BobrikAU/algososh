@@ -36,29 +36,29 @@ export const MainPage: React.FC<MainPageProps> = ({
       />
       <div className={styles.cards_box}>
         <Link className={styles.link} to="/recursion">
-          <div className={`${styles.card} ${styles.string}`} />
+          <div className={`${styles.card} ${styles[`string_${lang}`]}`} />
         </Link>
         <Link className={styles.link} to="/fibonacci">
-          <div className={`${styles.card} ${styles.fibonacci}`} />
+          <div className={`${styles.card} ${styles[`fibonacci_${lang}`]}`} />
         </Link>
         <Link className={styles.link} to="/sorting">
-          <div className={`${styles.card} ${styles.arr}`} />
+          <div className={`${styles.card} ${styles[`arr_${lang}`]}`} />
         </Link>
         <Link className={styles.link} to="/stack">
-          <div className={`${styles.card} ${styles.stack}`} />
+          <div className={`${styles.card} ${styles[`stack_${lang}`]}`} />
         </Link>
         <Link className={styles.link} to="/queue">
-          <div className={`${styles.card} ${styles.queue}`} />
+          <div className={`${styles.card} ${styles[`queue_${lang}`]}`} />
         </Link>
         <Link className={styles.link} to="/list">
-          <div className={`${styles.card} ${styles.list}`} />
+          <div className={`${styles.card} ${styles[`list_${lang}`]}`} />
         </Link>
       </div>
       <Marquee className={styles.ticker} gradient={false} speed={200}>
         <p
           className={`text text_type_ticker text_color_secondary ${styles.ticker_text}`}
         >
-          Вдохновлено школами, в которых не учили алгоритмам
+          {text.mainPage.ticker_text[lang]}
         </p>
         <div className={styles.dot_box}>
           <p className={styles.dot} />
@@ -67,7 +67,7 @@ export const MainPage: React.FC<MainPageProps> = ({
       <p
         className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
-        © Сделано в Практикуме.
+        {text.mainPage.copyright[lang]}
       </p>
     </main>
   );

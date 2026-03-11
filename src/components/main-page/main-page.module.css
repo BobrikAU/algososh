@@ -58,52 +58,100 @@
   border-radius: 20px;
 }
 
-.string {
-  background-image: url("../../images/string.svg");
+.string_RUS {
+  background-image: url("../../images/string_rus.svg");
 }
 
-.string:hover {
-  background-image: url("../../images/string-hover.svg");
+.string_DE {
+  background-image: url("../../images/string_de.svg");
 }
 
-.fibonacci {
-  background-image: url("../../images/fibonacci.svg");
+.string_RUS:hover {
+  background-image: url("../../images/string-hover_rus.svg");
 }
 
-.fibonacci:hover {
-  background-image: url("../../images/fibonacci-hover.svg");
+.string_DE:hover {
+  background-image: url("../../images/string-hover_de.svg");
 }
 
-.arr {
-  background-image: url("../../images/arr.svg");
+.fibonacci_RUS {
+  background-image: url("../../images/fibonacci_rus.svg");
 }
 
-.arr:hover {
-  background-image: url("../../images/arr-hover.svg");
+.fibonacci_DE {
+  background-image: url("../../images/fibonacci_de.svg");
 }
 
-.stack {
-  background-image: url("../../images/stack.svg");
+.fibonacci_RUS:hover {
+  background-image: url("../../images/fibonacci-hover_rus.svg");
 }
 
-.stack:hover {
-  background-image: url("../../images/stack-hover.svg");
+.fibonacci_DE:hover {
+  background-image: url("../../images/fibonacci-hover_de.svg");
 }
 
-.queue {
-  background-image: url("../../images/queue.svg");
+.arr_RUS {
+  background-image: url("../../images/arr_rus.svg");
 }
 
-.queue:hover {
-  background-image: url("../../images/queue-hover.svg");
+.arr_DE {
+  background-image: url("../../images/arr_de.svg");
 }
 
-.list {
-  background-image: url("../../images/list.svg");
+.arr_RUS:hover {
+  background-image: url("../../images/arr-hover_rus.svg");
 }
 
-.list:hover {
-  background-image: url("../../images/list-hover.svg");
+.arr_DE:hover {
+  background-image: url("../../images/arr-hover_de.svg");
+}
+
+.stack_RUS {
+  background-image: url("../../images/stack_rus.svg");
+}
+
+.stack_DE {
+  background-image: url("../../images/stack_de.svg");
+}
+
+.stack_RUS:hover {
+  background-image: url("../../images/stack-hover_rus.svg");
+}
+
+.stack_DE:hover {
+  background-image: url("../../images/stack-hover_de.svg");
+}
+
+.queue_RUS {
+  background-image: url("../../images/queue_rus.svg");
+}
+
+.queue_DE {
+  background-image: url("../../images/queue_de.svg");
+}
+
+.queue_RUS:hover {
+  background-image: url("../../images/queue-hover_rus.svg");
+}
+
+.queue_DE:hover {
+  background-image: url("../../images/queue-hover_de.svg");
+}
+
+.list_RUS {
+  background-image: url("../../images/list_rus.svg");
+}
+
+.list_DE {
+  background-image: url("../../images/list_de.svg");
+}
+
+.list_RUS:hover {
+  background-image: url("../../images/list-hover_rus.svg");
+}
+
+.list_DE:hover {
+  background-image: url("../../images/list-hover_de.svg");
 }
 
 .ticker {
