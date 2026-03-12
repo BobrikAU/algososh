@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/algososh/static/css/main.1a322606.css",
+    "main.css": "/algososh/static/css/main.900398da.css",
     "main.js": "/algososh/static/js/main.432f332e.js",
     "static/js/787.0d1937ff.chunk.js": "/algososh/static/js/787.0d1937ff.chunk.js",
     "static/media/bg.jpg": "/algososh/static/media/bg.971318c52485d1963a30.jpg",
@@ -30,13 +30,13 @@
     "static/media/string_de.svg": "/algososh/static/media/string_de.ec088c0339aa09db88d6.svg",
     "index.html": "/algososh/index.html",
     "static/media/loader.svg": "/algososh/static/media/loader.b935a8aeb021da7b2a90191a58ea95f4.svg",
-    "static/media/arrow.svg": "/algososh/static/media/arrow.9ce48e0c0a062d21fd40.svg",
-    "main.1a322606.css.map": "/algososh/static/css/main.1a322606.css.map",
+    "static/media/arrow.svg": "/algososh/static/media/arrow.ef81251d678493fcda0b.svg",
+    "main.900398da.css.map": "/algososh/static/css/main.900398da.css.map",
     "main.432f332e.js.map": "/algososh/static/js/main.432f332e.js.map",
     "787.0d1937ff.chunk.js.map": "/algososh/static/js/787.0d1937ff.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1a322606.css",
+    "static/css/main.900398da.css",
     "static/js/main.432f332e.js"
   ]
 }
