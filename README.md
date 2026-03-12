@@ -4,11 +4,11 @@
 
 ## Ziel des Projekts
 
-Das einseitige React-Anwendung lässt visuel kennenlernen, wie unten genannten Algorzthmen funktionieren:
+Das einseitige React-Anwendung lässt visuel kennenlernen, wie unten genannten Algorythmen funktionieren:
 
 - **die Wende der Zeile**;
 - **die Kalkulation die Fibonacci-Folge**. Die Anzahl der Zahlen in der Folge wird von der Benutzter von 1 bis 19 bestimmt;
-- **das Sortieren des Arrays**. Zwei Sortiermethoden sind implementiert: „Bubble“ und „Selection“. Die Sortierung ist sowohl aufsteigend als auch absteigend möglich. Der Benutzer bestimmt die Sortiermethode und -richtung;
+- **das Sortieren des Arrays**. Zwei Sortiermethoden sind implementiert: „Bubble“ und „Auswahl“. Die Sortierung ist sowohl aufsteigend als auch absteigend möglich. Der Benutzer bestimmt die Sortiermethode und -richtung;
 - **Stack**. Das Hinzufügen und Entfernen von Elementen zum Stack ist implementiert;
 - **Queue**. Der Benutzer kann Elemente zur Queue hinzufügen und daraus entfernen;
 - **Verkettete Liste**. Mithilfe von Steuerelementen können Elemente zu einer verketteten Liste hinzugefügt und daraus entfernt werden.
