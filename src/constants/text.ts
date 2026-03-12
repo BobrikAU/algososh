@@ -67,4 +67,128 @@ export const text = {
       },
     },
   },
+  fibonacciPage: {
+    title: {
+      DE: "Fibonacci-Folge",
+      RUS: "Последовательность Фибоначчи",
+    },
+    inputPlaceholder: {
+      DE: "Geben Sie eine Zahl ein",
+      RUS: "Введите число",
+    },
+    buttonText: {
+      DE: "Kalkulieren",
+      RUS: "Рассчитать",
+    },
+  },
+  listPage: {
+    title: {
+      DE: "Verkettete Liste",
+      RUS: "Связный список",
+    },
+    inputEntersValuePlaceholder: {
+      DE: "Geben Sie einen Wert ein",
+      RUS: "Введите значение",
+    },
+    buttonAddInHead: {
+      DE: "In head hinzufügen",
+      RUS: "Добавить в head",
+    },
+    buttonAddInTail: {
+      DE: "In tail hinzufügen",
+      RUS: "Добавить в tail",
+    },
+    buttonRemoveFromHead: {
+      DE: "Aus head entfernen",
+      RUS: "Удалить из head",
+    },
+    buttonRemoveFromTail: {
+      DE: "Aus tail entfernen",
+      RUS: "Удалить из tail",
+    },
+    inputIndexPlaceholder: {
+      DE: "Geben Sie den Index ein",
+      RUS: "Введите индекс",
+    },
+    buttonAddByIndex: {
+      DE: "Nach dem Index hinzufügen",
+      RUS: "Добавить по индексу",
+    },
+    buttonRemoveByIndex: {
+      DE: "Nach dem Index entfernen",
+      RUS: "Удалить по индексу",
+    },
+  },
+  queuePage: {
+    title: {
+      DE: "Queue",
+      RUS: "Очередь",
+    },
+    buttonAdd: {
+      DE: "Hinzufügen",
+      RUS: "Добавить",
+    },
+    buttonRemove: {
+      DE: "Entfernen",
+      RUS: "Удалить",
+    },
+    buttonClean: {
+      DE: "Leeren",
+      RUS: "Очистить",
+    },
+  },
+  sortingPage: {
+    title: {
+      DE: "Sortierung des Arrays",
+      RUS: "Сортировка массива",
+    },
+    inputChoice: {
+      DE: "Auswahl",
+      RUS: "Выбор",
+    },
+    inputBubble: {
+      DE: "Bubble",
+      RUS: "Пузырёк",
+    },
+    buttonIncrease: {
+      DE: "Aufsteigend",
+      RUS: "По возрастанию",
+    },
+    buttonDecrease: {
+      DE: "Absteigend",
+      RUS: "По убыванию",
+    },
+    buttonGetArray: {
+      DE: "Neues Array",
+      RUS: "Новый массив",
+    },
+  },
+  stackPage: {
+    title: {
+      DE: "Stack",
+      RUS: "Стек",
+    },
+    buttonAdd: {
+      DE: "Hinzufügen",
+      RUS: "Добавить",
+    },
+    buttonRemove: {
+      DE: "Entfernen",
+      RUS: "Удалить",
+    },
+    buttonClean: {
+      DE: "Leeren",
+      RUS: "Очистить",
+    },
+  },
+  stringPage: {
+    title: {
+      DE: "Zeile",
+      RUS: "Строка",
+    },
+    buttonReverse: {
+      DE: "Umkehren",
+      RUS: "Развернуть",
+    },
+  },
 };

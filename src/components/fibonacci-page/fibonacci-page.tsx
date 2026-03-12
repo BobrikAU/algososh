@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./fibonacci-page.module.css";
 import { Input } from "../ui/input/input";
@@ -7,6 +7,8 @@ import { Circle } from "../ui/circle/circle";
 import { nanoid } from "nanoid";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface IFibonacciPage {
   changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
@@ -27,6 +29,7 @@ export const FibonacciPage: React.FC<IFibonacciPage> = ({ changeLanguage }) => {
   const [isFiboMading, setIsFiboMading] = useState<boolean>(false);
   // состояние валидности поля input
   const [isInputValid, setIsInputValid] = useState<boolean>(false);
+  const lang = useContext(UsedLanguageContext);
 
   // поиск поля input в DOM
   const input: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -104,12 +107,12 @@ export const FibonacciPage: React.FC<IFibonacciPage> = ({ changeLanguage }) => {
 
   return (
     <SolutionLayout
-      title="Последовательность Фибоначчи"
+      title={text.fibonacciPage.title[lang]}
       changeLanguage={changeLanguage}
     >
       <div className={styles.elementsContainer}>
         <Input
-          placeholder="Введите число"
+          placeholder={text.fibonacciPage.inputPlaceholder[lang]}
           max={19}
           type="number"
           isLimitText={true}
@@ -118,7 +121,7 @@ export const FibonacciPage: React.FC<IFibonacciPage> = ({ changeLanguage }) => {
           onChange={getIsInputValid}
         />
         <Button
-          text="Рассчитать"
+          text={text.fibonacciPage.buttonText[lang]}
           onClick={setNumber}
           extraClass={styles.button}
           isLoader={isFiboMading}

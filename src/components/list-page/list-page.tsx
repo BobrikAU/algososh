@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
 import { Input } from "../ui/input/input";
@@ -12,6 +12,8 @@ import { LinkedListNode } from "./linkedListNode";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { HEAD, TAIL } from "../../constants/element-captions";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface IListPage {
   changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
@@ -44,6 +46,7 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
     isAddByIndex: false,
     isDeleteByIndex: false,
   });
+  const lang = useContext(UsedLanguageContext);
 
   // список для инициализации первоначального списка с случайными значениями
   let initializingList: ILinkedListNode[] = [];
@@ -420,17 +423,20 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
   );
 
   return (
-    <SolutionLayout title="Связный список" changeLanguage={changeLanguage}>
+    <SolutionLayout
+      title={text.listPage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <div className={styles.controlContainer}>
         <Input
-          placeholder="Введите значение"
+          placeholder={text.listPage.inputEntersValuePlaceholder[lang]}
           maxLength={4}
           extraClass={`${styles.input} input-string-container`}
           onChange={checkStringInput}
           disabled={state.isAlgoritmWork}
         />
         <Button
-          text="Добавить в head"
+          text={text.listPage.buttonAddInHead[lang]}
           linkedList="small"
           extraClass={styles.button}
           onClick={addNewHead}
@@ -438,7 +444,7 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
           isLoader={state.isAddHead}
         />
         <Button
-          text="Добавить в tail"
+          text={text.listPage.buttonAddInTail[lang]}
           linkedList="small"
           extraClass={styles.button}
           onClick={addNewTail}
@@ -446,7 +452,7 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
           isLoader={state.isAddTail}
         />
         <Button
-          text="Удалить из head"
+          text={text.listPage.buttonRemoveFromHead[lang]}
           linkedList="small"
           extraClass={styles.button}
           onClick={deleteHead}
@@ -454,14 +460,14 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
           isLoader={state.isDeleteHead}
         />
         <Button
-          text="Удалить из tail"
+          text={text.listPage.buttonRemoveFromTail[lang]}
           linkedList="small"
           onClick={deleteTail}
           disabled={state.isAlgoritmWork}
           isLoader={state.isDeleteTail}
         />
         <Input
-          placeholder="Введите индекс"
+          placeholder={text.listPage.inputIndexPlaceholder[lang]}
           type="number"
           maxLength={4}
           extraClass={`${styles.input} input-index-container`}
@@ -469,7 +475,7 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
           disabled={state.isAlgoritmWork}
         />
         <Button
-          text="Добавить по индексу"
+          text={text.listPage.buttonAddByIndex[lang]}
           linkedList="big"
           extraClass={styles.button}
           disabled={
@@ -482,7 +488,7 @@ export const ListPage: React.FC<IListPage> = ({ changeLanguage }) => {
           isLoader={state.isAddByIndex}
         />
         <Button
-          text="Удалить по индексу"
+          text={text.listPage.buttonRemoveByIndex[lang]}
           linkedList="big"
           disabled={isIndexInputEmpty || state.isAlgoritmWork || !isIndexFit}
           onClick={deleteByIndex}

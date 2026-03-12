@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./stack-page.module.css";
 import { Input } from "../ui/input/input";
@@ -9,6 +9,8 @@ import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Stack } from "./stack";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface IStackPage {
   changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
@@ -37,6 +39,7 @@ export const StackPage: React.FC<IStackPage> = ({ changeLanguage }) => {
     isAdding: false,
     isRemoval: false,
   });
+  const lang = useContext(UsedLanguageContext);
 
   // поле input
   const inputRef: React.MutableRefObject<HTMLInputElement | null> =
@@ -129,7 +132,10 @@ export const StackPage: React.FC<IStackPage> = ({ changeLanguage }) => {
   });
 
   return (
-    <SolutionLayout title="Стек" changeLanguage={changeLanguage}>
+    <SolutionLayout
+      title={text.stackPage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <div className={styles.controlContainer}>
         <Input
           extraClass={`${styles.input} input-in-container`}
@@ -139,14 +145,14 @@ export const StackPage: React.FC<IStackPage> = ({ changeLanguage }) => {
           disabled={state.isAlgoritmWork}
         />
         <Button
-          text="Добавить"
+          text={text.stackPage.buttonAdd[lang]}
           extraClass={styles.buttonAdd}
           disabled={!isTextInInput || state.isAlgoritmWork}
           onClick={addElementInStack}
           isLoader={state.isAdding}
         />
         <Button
-          text="Удалить"
+          text={text.stackPage.buttonRemove[lang]}
           extraClass={styles.buttonDelette}
           onClick={deleteElementInStack}
           disabled={
@@ -155,7 +161,7 @@ export const StackPage: React.FC<IStackPage> = ({ changeLanguage }) => {
           isLoader={state.isRemoval}
         />
         <Button
-          text="Очистить"
+          text={text.stackPage.buttonClean[lang]}
           extraClass={styles.buttonReset}
           onClick={reset}
           disabled={

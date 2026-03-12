@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import styles from "./queue-page.module.css";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
@@ -10,6 +10,8 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Queue } from "./queue";
 import { HEAD, TAIL } from "../../constants/element-captions";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface IQueuePage {
   changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
@@ -43,6 +45,7 @@ export const QueuePage: React.FC<IQueuePage> = ({ changeLanguage }) => {
     addValue: false,
     deleteValue: false,
   });
+  const lang = useContext(UsedLanguageContext);
 
   // поле input
   const inputRef: React.MutableRefObject<HTMLInputElement | null> =
@@ -215,7 +218,10 @@ export const QueuePage: React.FC<IQueuePage> = ({ changeLanguage }) => {
   };
 
   return (
-    <SolutionLayout title="Очередь" changeLanguage={changeLanguage}>
+    <SolutionLayout
+      title={text.queuePage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <div className={styles.controlContainer}>
         <Input
           extraClass={`${styles.input} input-in-container`}
@@ -225,14 +231,14 @@ export const QueuePage: React.FC<IQueuePage> = ({ changeLanguage }) => {
           onChange={handleChangeInput}
         />
         <Button
-          text="Добавить"
+          text={text.queuePage.buttonAdd[lang]}
           extraClass={styles.buttonAdd}
           onClick={addValueInQueue}
           disabled={isQueueFull() || isInputEmpty || state.isAlgoritmWork}
           isLoader={state.addValue}
         />
         <Button
-          text="Удалить"
+          text={text.queuePage.buttonRemove[lang]}
           extraClass={styles.buttonDelette}
           onClick={deleteValueInQueue}
           disabled={
@@ -242,7 +248,7 @@ export const QueuePage: React.FC<IQueuePage> = ({ changeLanguage }) => {
           isLoader={state.deleteValue}
         />
         <Button
-          text="Очистить"
+          text={text.queuePage.buttonClean[lang]}
           extraClass={styles.buttonReset}
           onClick={clearQueue}
           disabled={isQueueEmpty() || state.isAlgoritmWork}

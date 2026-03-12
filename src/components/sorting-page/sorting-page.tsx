@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useContext } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -9,6 +9,8 @@ import { ElementStates } from "../../types/element-states";
 import { nanoid } from "nanoid";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface ISortingPage {
   changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
@@ -41,6 +43,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
     state: false,
     method: "",
   });
+  const lang = useContext(UsedLanguageContext);
 
   // формирование данных о массиве для сортировки
   const getNewArray = () => {
@@ -305,7 +308,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
     <>
       <div className={styles.controlContainer}>
         <RadioInput
-          label="Выбор"
+          label={text.sortingPage.inputChoice[lang]}
           name="method"
           value="choice"
           extraClass={styles.radioInput}
@@ -314,7 +317,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
           disabled={isSorting.state}
         />
         <RadioInput
-          label="Пузырёк"
+          label={text.sortingPage.inputBubble[lang]}
           name="method"
           value="bubble"
           extraClass={styles.radioInput}
@@ -324,7 +327,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
         />
         <Button
           type="button"
-          text="По возрастанию"
+          text={text.sortingPage.buttonIncrease[lang]}
           sorting={Direction.Ascending}
           extraClass={styles.button}
           onClick={() => {
@@ -335,7 +338,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
         />
         <Button
           type="button"
-          text="По убыванию"
+          text={text.sortingPage.buttonDecrease[lang]}
           sorting={Direction.Descending}
           extraClass={styles.button}
           onClick={() => {
@@ -346,7 +349,7 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
         />
         <Button
           type="button"
-          text="Новый массив"
+          text={text.sortingPage.buttonGetArray[lang]}
           extraClass={styles.button}
           onClick={getNewArray}
           disabled={isSorting.state}
@@ -360,8 +363,12 @@ export const ChildrenOfSortingPage: React.FC<IChildrenOfSortingPage> = ({
 };
 
 export const SortingPage: React.FC<ISortingPage> = ({ changeLanguage }) => {
+  const lang = useContext(UsedLanguageContext);
   return (
-    <SolutionLayout title="Сортировка массива" changeLanguage={changeLanguage}>
+    <SolutionLayout
+      title={text.sortingPage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <ChildrenOfSortingPage />
     </SolutionLayout>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import styles from "./string.module.css";
@@ -8,6 +8,8 @@ import { nanoid } from "nanoid";
 import { ElementStates } from "../../types/element-states";
 import { DELAY_IN_MS } from "../../constants/delays";
 import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
 
 interface IStringElement {
   string: string;
@@ -25,6 +27,7 @@ export const ChildrenOfStringComponent: React.FC = () => {
   const [invertedString, setInvertedString] = useState<IStringElement[]>([]);
   const [isStringInvert, setIsStringInvert] = useState<boolean>(false);
   const [isInputEmpty, setIsInputEmpty] = useState<boolean>(true);
+  const lang = useContext(UsedLanguageContext);
 
   // поиск поля input в DOM
   const input: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -143,7 +146,7 @@ export const ChildrenOfStringComponent: React.FC = () => {
           onChange={controlInputValue}
         />
         <Button
-          text="Развернуть"
+          text={text.stringPage.buttonReverse[lang]}
           onClick={useTextInput}
           isLoader={isStringInvert}
           disabled={isStringInvert || isInputEmpty}
@@ -159,8 +162,13 @@ export const ChildrenOfStringComponent: React.FC = () => {
 export const StringComponent: React.FC<IStringComponent> = ({
   changeLanguage,
 }) => {
+  const lang = useContext(UsedLanguageContext);
+
   return (
-    <SolutionLayout title="Строка" changeLanguage={changeLanguage}>
+    <SolutionLayout
+      title={text.stringPage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <ChildrenOfStringComponent />
     </SolutionLayout>
   );
