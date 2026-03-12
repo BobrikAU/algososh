@@ -1,6 +1,6 @@
 # Projekt. Fibonacci-ALGOSCHULE
 
-[Русский] (./README.ru.md/)
+[Русский](./README.ru.md/)
 
 ## Ziel des Projekts
 
