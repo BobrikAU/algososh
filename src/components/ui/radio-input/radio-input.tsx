@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { nanoid } from "nanoid";
 import styles from "./radio-input.module.css";
+import { text } from "../../../constants/text";
+import { UsedLanguageContext } from "../../../context/languageContext";
 
 interface RadioProps extends React.HTMLProps<HTMLInputElement> {
-  label: string;
+  label?: string;
   extraClass?: string;
 }
 
 export const RadioInput: React.FC<RadioProps> = ({
-  label = "Введите текст",
+  label,
   extraClass = "",
   ...rest
 }) => {
   const id = nanoid();
+  const lang = useContext(UsedLanguageContext);
+  if (!label) {
+    label = text.ui.radioInput.label[lang];
+  }
 
   return (
     <div className={`${styles.content} ${extraClass}`}>

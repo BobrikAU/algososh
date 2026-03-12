@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import styles from "./queue-page.module.css";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
@@ -9,6 +9,13 @@ import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Queue } from "./queue";
 import { HEAD, TAIL } from "../../constants/element-captions";
+import type { UsedLanguageContextType } from "../../context/languageContext";
+import { text } from "../../constants/text";
+import { UsedLanguageContext } from "../../context/languageContext";
+
+interface IQueuePage {
+  changeLanguage: React.Dispatch<React.SetStateAction<UsedLanguageContextType>>;
+}
 
 // интерфейс элемента очереди
 interface IElement {
@@ -22,34 +29,38 @@ interface IElement {
 
 // интерфейс состояния исполнения алгоритма
 interface IState {
-    isAlgoritmWork: boolean;
+  isAlgoritmWork: boolean;
   addValue: boolean;
   deleteValue: boolean;
 }
 
-export const QueuePage: React.FC = () => {
+export const QueuePage: React.FC<IQueuePage> = ({ changeLanguage }) => {
   // состояние для проведения принудительного рендеринга
-  const [ , setNewRender ] = useState<string>('');
+  const [, setNewRender] = useState<string>("");
   // является ли значение поля input пустой строкой или он заполнен
-  const [ isInputEmpty, setIsInputEmpty ] = useState<boolean>(true);
+  const [isInputEmpty, setIsInputEmpty] = useState<boolean>(true);
   // состояние работы алгоритма очереди
-  const [ state, setState ] = useState<IState>({
+  const [state, setState] = useState<IState>({
     isAlgoritmWork: false,
     addValue: false,
     deleteValue: false,
   });
-  
+  const lang = useContext(UsedLanguageContext);
+
   // поле input
-  const inputRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const inputRef: React.MutableRefObject<HTMLInputElement | null> =
+    useRef(null);
   useEffect(() => {
-    inputRef.current = document.querySelector('.input-in-container > .text_type_input');
+    inputRef.current = document.querySelector(
+      ".input-in-container > .text_type_input"
+    );
   }, []);
   // создание экземпляра класса очереди и его первоначальное заполнение
   const queue = useRef(new Queue<IElement>());
   if (queue.current.getQueue().length === 0) {
     for (let i = 0; i <= 6; i++) {
       queue.current.pushInitialElement({
-        letter: '',
+        letter: "",
         index: i,
         state: ElementStates.Default,
         uuid: nanoid(),
@@ -61,7 +72,7 @@ export const QueuePage: React.FC = () => {
 
   // обработка события набора текста в поле input
   const handleChangeInput = () => {
-    if (inputRef.current && inputRef.current.value === '') {
+    if (inputRef.current && inputRef.current.value === "") {
       setIsInputEmpty(true);
     } else {
       setIsInputEmpty(false);
@@ -70,11 +81,11 @@ export const QueuePage: React.FC = () => {
 
   // очитска очереди
   const clearQueue = () => {
-    queue.current.getQueue().forEach(item => {
-      item.letter = ''
+    queue.current.getQueue().forEach((item) => {
+      item.letter = "";
       item.head = null;
       item.tail = null;
-    })
+    });
     queue.current.changeHeadIndex(0);
     queue.current.changeTailIndex(0);
     setNewRender(nanoid());
@@ -88,9 +99,9 @@ export const QueuePage: React.FC = () => {
       deleteValue: false,
     });
     const array = queue.current.getQueue();
-    const arrayHead = array[(queue.current.getHeadIndex())];
+    const arrayHead = array[queue.current.getHeadIndex()];
     // добавление первого значения в пустую очередь
-    if (arrayHead.letter === '' && inputRef.current) {
+    if (arrayHead.letter === "" && inputRef.current) {
       arrayHead.state = ElementStates.Changing;
       setNewRender(nanoid());
       setTimeout(() => {
@@ -98,7 +109,7 @@ export const QueuePage: React.FC = () => {
           arrayHead.letter = inputRef.current.value;
           arrayHead.head = HEAD;
           arrayHead.tail = TAIL;
-          inputRef.current.value = '';
+          inputRef.current.value = "";
           setIsInputEmpty(true);
         }
         setTimeout(() => {
@@ -113,7 +124,8 @@ export const QueuePage: React.FC = () => {
       // добавление значения в очередь, когда в ней уже есть другие значения
     } else if (inputRef.current) {
       const tailIndex = queue.current.getTailIndex();
-      const newTailIndex = tailIndex + 1 < queue.current.getQueueLength() ? tailIndex + 1 : 0;
+      const newTailIndex =
+        tailIndex + 1 < queue.current.getQueueLength() ? tailIndex + 1 : 0;
       const arrayOldTail = array[tailIndex];
       const arrayNewTail = array[newTailIndex];
       arrayNewTail.state = ElementStates.Changing;
@@ -124,7 +136,7 @@ export const QueuePage: React.FC = () => {
           arrayNewTail.letter = inputRef.current.value;
           arrayNewTail.tail = TAIL;
           queue.current.changeTailIndex(newTailIndex);
-          inputRef.current.value = '';
+          inputRef.current.value = "";
           setIsInputEmpty(true);
         }
         setTimeout(() => {
@@ -147,13 +159,14 @@ export const QueuePage: React.FC = () => {
       deleteValue: true,
     });
     const headIndex = queue.current.getHeadIndex();
-    const newHeadIndex = headIndex + 1 < queue.current.getQueueLength() ? headIndex + 1 : 0;
+    const newHeadIndex =
+      headIndex + 1 < queue.current.getQueueLength() ? headIndex + 1 : 0;
     const arrayOldHead = queue.current.getQueue()[headIndex];
     const arrayNewHead = queue.current.getQueue()[newHeadIndex];
-    arrayOldHead.state =  ElementStates.Changing;
+    arrayOldHead.state = ElementStates.Changing;
     setNewRender(nanoid());
     setTimeout(() => {
-      arrayOldHead.letter = '';
+      arrayOldHead.letter = "";
       if (headIndex === queue.current.getTailIndex()) {
         arrayOldHead.tail = null;
       } else {
@@ -161,7 +174,7 @@ export const QueuePage: React.FC = () => {
         arrayNewHead.head = HEAD;
         queue.current.changeHeadIndex(newHeadIndex);
       }
-      arrayOldHead.state =  ElementStates.Default;
+      arrayOldHead.state = ElementStates.Default;
       setState({
         isAlgoritmWork: false,
         addValue: false,
@@ -171,35 +184,44 @@ export const QueuePage: React.FC = () => {
   };
 
   // формирование списка JSX-элементов для визуального отображения очереди
-  const circleElements = queue.current.getQueue().map(item => 
-    <Circle
-      state={item.state}
-      letter={item.letter}
-      index={item.index}
-      key={item.uuid}
-      extraClass={styles.circle}
-      head={item.head}
-      tail={item.tail}
-    />
-  );
+  const circleElements = queue.current
+    .getQueue()
+    .map((item) => (
+      <Circle
+        state={item.state}
+        letter={item.letter}
+        index={item.index}
+        key={item.uuid}
+        extraClass={styles.circle}
+        head={item.head}
+        tail={item.tail}
+      />
+    ));
 
   // определение факта того, что очередь заполнена полностью
   const isQueueFull = () => {
     const tailIndex = queue.current.getTailIndex();
     const headIndex = queue.current.getHeadIndex();
-    return (tailIndex === (queue.current.getQueueLength() - 1) && headIndex === 0) || 
-      (tailIndex + 1 ===  headIndex);
+    return (
+      (tailIndex === queue.current.getQueueLength() - 1 && headIndex === 0) ||
+      tailIndex + 1 === headIndex
+    );
   };
 
   // определение факта того, что очередь пустая
   const isQueueEmpty = () => {
-    return  queue.current.getHeadIndex() === 0 &&
-            queue.current.getTailIndex() === 0 && 
-            queue.current.getQueue()[0].letter === '' ? true : false;
+    return queue.current.getHeadIndex() === 0 &&
+      queue.current.getTailIndex() === 0 &&
+      queue.current.getQueue()[0].letter === ""
+      ? true
+      : false;
   };
 
   return (
-    <SolutionLayout title="Очередь">
+    <SolutionLayout
+      title={text.queuePage.title[lang]}
+      changeLanguage={changeLanguage}
+    >
       <div className={styles.controlContainer}>
         <Input
           extraClass={`${styles.input} input-in-container`}
@@ -209,29 +231,31 @@ export const QueuePage: React.FC = () => {
           onChange={handleChangeInput}
         />
         <Button
-          text="Добавить"
+          text={text.queuePage.buttonAdd[lang]}
           extraClass={styles.buttonAdd}
           onClick={addValueInQueue}
           disabled={isQueueFull() || isInputEmpty || state.isAlgoritmWork}
           isLoader={state.addValue}
         />
         <Button
-          text="Удалить"
+          text={text.queuePage.buttonRemove[lang]}
           extraClass={styles.buttonDelette}
           onClick={deleteValueInQueue}
-          disabled={queue.current.getQueue()[queue.current.getHeadIndex()].letter === '' || 
-            state.isAlgoritmWork}
+          disabled={
+            queue.current.getQueue()[queue.current.getHeadIndex()].letter ===
+              "" || state.isAlgoritmWork
+          }
           isLoader={state.deleteValue}
         />
         <Button
-          text="Очистить"
+          text={text.queuePage.buttonClean[lang]}
           extraClass={styles.buttonReset}
           onClick={clearQueue}
           disabled={isQueueEmpty() || state.isAlgoritmWork}
         />
       </div>
       <div className={styles.circlesContainer}>
-        {circleElements && circleElements}      
+        {circleElements && circleElements}
       </div>
     </SolutionLayout>
   );
